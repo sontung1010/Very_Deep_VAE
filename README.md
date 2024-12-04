@@ -25,21 +25,7 @@ after moving working directory, and prepare the dataset.
 python train.py --hps cifar10
 ```
 
-
-
-The `mpiexec` arguments you use for runs with more than 1 node depend on the configuration of your system, so please adapt accordingly.
-
-```bash
-mpiexec -n 2 python train.py --hps cifar10
-mpiexec -n 32 python train.py --hps imagenet32
-mpiexec -n 32 python train.py --hps imagenet64
-mpiexec -n 32 python train.py --hps ffhq256
-mpiexec -n 32 python train.py --hps ffhq1024
-```
-
-# Restoring saved models
-For convenience, we have included training checkpoints which can be restored in order to confirm performance, continue training, or generate samples.
-
+# Dataset preparation
 ### ImageNet 32
 ```bash
 # 119M parameter model, trained for 1.7M iters (about 2.5 weeks on 32 V100)
