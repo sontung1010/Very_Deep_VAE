@@ -34,4 +34,3 @@ Thumbs.db
 # Ignore output folders and unnecessary images
 saved_images/
 output/
-*.png
