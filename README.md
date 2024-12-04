@@ -1,16 +1,19 @@
 
-# Anaconda environment
+# environment
+```bash
+# cuda 12.6, gpu RTX 4070
 conda create -n virtual_vdvae python = 3.9
 
-### dependancy
-following modules need to be installed.
+```
 
-'''bash
+### dependancy
+```bash
+# following modules need to be installed.
 conda install pytorch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 pytorch-cuda=12.1 -c pytorch -c nvidia
 pip install imageio
 conda install -c conda-forge mpi4py
 pip install scikit-learn
-'''
+```
 
 ### prepare the dataset
 manually download one of the dataset and unzip in the same directory.
