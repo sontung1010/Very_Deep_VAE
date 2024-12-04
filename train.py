@@ -4,7 +4,6 @@ import os
 import time
 import torch
 from torch.utils.data import DataLoader
-from torch.utils.data.distributed import DistributedSampler
 from data import set_up_data
 from utils import get_cpu_stats_over_ranks
 from train_helpers import set_up_hyperparams, load_vaes, load_opt, accumulate_stats, save_model, update_ema
@@ -48,20 +47,67 @@ def get_sample_for_visualization(data, preprocess_fn, num, dataset):
     return orig_image, preprocessed
 
 
+# def train_loop(H, data_train, data_valid, preprocess_fn, vae, ema_vae, logprint):
+#     optimizer, scheduler, cur_eval_loss, iterate, starting_epoch = load_opt(H, vae, logprint)
+#     train_sampler = DistributedSampler(data_train, num_replicas=H.mpi_size, rank=H.rank)
+#     viz_batch_original, viz_batch_processed = get_sample_for_visualization(data_valid, preprocess_fn, H.num_images_visualize, H.dataset)
+#     early_evals = set([1] + [2 ** exp for exp in range(3, 14)])
+#     stats = []
+#     iters_since_starting = 0
+#     H.ema_rate = torch.as_tensor(H.ema_rate).cuda()
+#     for epoch in range(starting_epoch, H.num_epochs):
+#         train_sampler.set_epoch(epoch)
+#         for x in DataLoader(data_train, batch_size=H.n_batch, drop_last=True, pin_memory=True, sampler=train_sampler):
+#             data_input, target = preprocess_fn(x)
+#             training_stats = training_step(H, data_input, target, vae, ema_vae, optimizer, iterate)
+#             stats.append(training_stats)
+#             scheduler.step()
+#             if iterate % H.iters_per_print == 0 or iters_since_starting in early_evals:
+#                 logprint(model=H.desc, type='train_loss', lr=scheduler.get_last_lr()[0], epoch=epoch, step=iterate, **accumulate_stats(stats, H.iters_per_print))
+
+#             if iterate % H.iters_per_images == 0 or (iters_since_starting in early_evals and H.dataset != 'ffhq_1024') and H.rank == 0:
+#                 write_images(H, ema_vae, viz_batch_original, viz_batch_processed, f'{H.save_dir}/samples-{iterate}.png', logprint)
+
+#             iterate += 1
+#             iters_since_starting += 1
+#             if iterate % H.iters_per_save == 0 and H.rank == 0:
+#                 if np.isfinite(stats[-1]['elbo']):
+#                     logprint(model=H.desc, type='train_loss', epoch=epoch, step=iterate, **accumulate_stats(stats, H.iters_per_print))
+#                     fp = os.path.join(H.save_dir, 'latest')
+#                     logprint(f'Saving model@ {iterate} to {fp}')
+#                     save_model(fp, vae, ema_vae, optimizer, H)
+
+#             if iterate % H.iters_per_ckpt == 0 and H.rank == 0:
+#                 save_model(os.path.join(H.save_dir, f'iter-{iterate}'), vae, ema_vae, optimizer, H)
+
+#         if epoch % H.epochs_per_eval == 0:
+#             valid_stats = evaluate(H, ema_vae, data_valid, preprocess_fn)
+#             logprint(model=H.desc, type='eval_loss', epoch=epoch, step=iterate, **valid_stats)
+
+
 def train_loop(H, data_train, data_valid, preprocess_fn, vae, ema_vae, logprint):
     optimizer, scheduler, cur_eval_loss, iterate, starting_epoch = load_opt(H, vae, logprint)
-    train_sampler = DistributedSampler(data_train, num_replicas=H.mpi_size, rank=H.rank)
     viz_batch_original, viz_batch_processed = get_sample_for_visualization(data_valid, preprocess_fn, H.num_images_visualize, H.dataset)
     early_evals = set([1] + [2 ** exp for exp in range(3, 14)])
     stats = []
     iters_since_starting = 0
+
     H.ema_rate = torch.as_tensor(H.ema_rate).cuda()
+
     for epoch in range(starting_epoch, H.num_epochs):
-        train_sampler.set_epoch(epoch)
-        for x in DataLoader(data_train, batch_size=H.n_batch, drop_last=True, pin_memory=True, sampler=train_sampler):
+        train_loader = DataLoader(
+            data_train,
+            batch_size=H.n_batch,
+            drop_last=True,
+            pin_memory=True,
+            shuffle=True
+        )
+
+        for x in train_loader:
             data_input, target = preprocess_fn(x)
             training_stats = training_step(H, data_input, target, vae, ema_vae, optimizer, iterate)
             stats.append(training_stats)
+
             scheduler.step()
             if iterate % H.iters_per_print == 0 or iters_since_starting in early_evals:
                 logprint(model=H.desc, type='train_loss', lr=scheduler.get_last_lr()[0], epoch=epoch, step=iterate, **accumulate_stats(stats, H.iters_per_print))
@@ -85,17 +131,38 @@ def train_loop(H, data_train, data_valid, preprocess_fn, vae, ema_vae, logprint)
             valid_stats = evaluate(H, ema_vae, data_valid, preprocess_fn)
             logprint(model=H.desc, type='eval_loss', epoch=epoch, step=iterate, **valid_stats)
 
+# def evaluate(H, ema_vae, data_valid, preprocess_fn):
+#     stats_valid = []
+#     valid_sampler = DistributedSampler(data_valid, num_replicas=H.mpi_size, rank=H.rank)
+#     for x in DataLoader(data_valid, batch_size=H.n_batch, drop_last=True, pin_memory=True, sampler=valid_sampler):
+#         data_input, target = preprocess_fn(x)
+#         stats_valid.append(eval_step(data_input, target, ema_vae))
+#     vals = [a['elbo'] for a in stats_valid]
+#     finites = np.array(vals)[np.isfinite(vals)]
+#     stats = dict(n_batches=len(vals), filtered_elbo=np.mean(finites), **{k: np.mean([a[k] for a in stats_valid]) for k in stats_valid[-1]})
+#     return stats
 
 def evaluate(H, ema_vae, data_valid, preprocess_fn):
     stats_valid = []
-    valid_sampler = DistributedSampler(data_valid, num_replicas=H.mpi_size, rank=H.rank)
-    for x in DataLoader(data_valid, batch_size=H.n_batch, drop_last=True, pin_memory=True, sampler=valid_sampler):
+    data_loader = DataLoader(data_valid, 
+                             batch_size=H.n_batch, 
+                             drop_last=True, 
+                             pin_memory=True, 
+                             shuffle=True) 
+
+    for x in data_loader:
         data_input, target = preprocess_fn(x)
         stats_valid.append(eval_step(data_input, target, ema_vae))
     vals = [a['elbo'] for a in stats_valid]
     finites = np.array(vals)[np.isfinite(vals)]
-    stats = dict(n_batches=len(vals), filtered_elbo=np.mean(finites), **{k: np.mean([a[k] for a in stats_valid]) for k in stats_valid[-1]})
+    stats = dict(
+        n_batches=len(vals),
+        filtered_elbo=np.mean(finites),
+        **{k: np.mean([a[k] for a in stats_valid]) for k in stats_valid[-1]}
+    )
+
     return stats
+
 
 
 def write_images(H, ema_vae, viz_batch_original, viz_batch_processed, fname, logprint):
