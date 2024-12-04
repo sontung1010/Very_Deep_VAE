@@ -5,23 +5,26 @@ Repository for the paper "Very Deep VAEs Generalize Autoregressive Models and Ca
 Some model samples and a visualization of how it generates them:
 ![image](header-image.png)
 
-This repository is tested with PyTorch 1.6, CUDA 10.1, Numpy 1.16, Ubuntu 18.04, and V100 GPUs.
+This repository is tested with PyTorch 2.5.1, CUDA 12.1, Numpy , Window 11, and 4070 GPU.
 
 # Setup
 Several additional packages are required, including NVIDIA Apex:
 ```
+conda create -n "vdvae" python=3.9 pip=23.2.1
+conda activate vdvae
+conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
 pip install imageio
-pip install mpi4py
-pip install sklearn
-git clone https://github.com/NVIDIA/apex
+conda install -c conda-forge mpi4py
+pip install scikit-learn
+git clone --branch 22.04-dev https://github.com/NVIDIA/apex.git
 cd apex
-pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
 cd ..
 ```
 
 Also, you'll have to download the data, depending on which one you want to run:
 ```
-./setup_cifar10.sh
+.\setup_cifar10.ps1
 ./setup_imagenet.sh imagenet32
 ./setup_imagenet.sh imagenet64
 ./setup_ffhq256.sh
