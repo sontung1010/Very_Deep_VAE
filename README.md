@@ -6,7 +6,7 @@ conda create -n virtual_vdvae python = 3.9
 
 ```
 
-### dependancy
+# dependancy
 ```bash
 # following modules need to be installed.
 conda install pytorch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 pytorch-cuda=12.1 -c pytorch -c nvidia
@@ -15,13 +15,15 @@ conda install -c conda-forge mpi4py
 pip install scikit-learn
 ```
 
-### prepare the dataset
+# prepare the dataset
 manually download one of the dataset and unzip in the same directory.
 
 
-### run the training
+# run the training
 after moving working directory, and prepare the dataset.
+```bash
 python train.py --hps cifar10
+```
 
 
 
