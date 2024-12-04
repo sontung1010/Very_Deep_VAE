@@ -7,6 +7,7 @@ import numpy as np
 import itertools
 
 
+
 class Block(nn.Module):
     def __init__(self, in_width, middle_width, out_width, down_rate=None, residual=False, use_3x3=True, zero_last=False):
         super().__init__()
