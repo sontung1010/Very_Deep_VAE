@@ -1,38 +1,18 @@
-# Very Deep VAEs
 
-Repository for the paper "Very Deep VAEs Generalize Autoregressive Models and Can Outperform Them on Images" (https://arxiv.org/abs/2011.10650)
+# Anaconda environment
+conda create -n virtual_vdvae python = 3.9
 
-Some model samples and a visualization of how it generates them:
-![image](header-image.png)
-
-This repository is tested with PyTorch 2.5.1, CUDA 12.1, Numpy , Window 11, and 4070 GPU.
-
-# Setup
-Several additional packages are required, including NVIDIA Apex:
-```
-conda create -n "vdvae" python=3.9 pip=23.2.1
-conda activate vdvae
-conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+# dependancy
+conda install pytorch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 pytorch-cuda=12.1 -c pytorch -c nvidia
 pip install imageio
 conda install -c conda-forge mpi4py
 pip install scikit-learn
-git clone --branch 22.04-dev https://github.com/NVIDIA/apex.git
-cd apex
-pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
-cd ..
-```
 
-Also, you'll have to download the data, depending on which one you want to run:
-```
-.\setup_cifar10.ps1
-./setup_imagenet.sh imagenet32
-./setup_imagenet.sh imagenet64
-./setup_ffhq256.sh
-./setup_ffhq1024.sh  /path/to/images1024x1024  # this one depends on you first downloading the subfolder `images_1024x1024` from https://github.com/NVlabs/ffhq-dataset on your own
-```
+# run the training
+after moving working directory, and prepare the dataset.
+python train.py --hps cifar10
 
-# Training models
-Hyperparameters all reside in `hps.py`. We use 2 gpus for our CIFAR-10 runs, and 32 for the rest of the models. (Using a lower batch size is also possible and results in slower learning, and may also require a lower learning rate).
+
 
 The `mpiexec` arguments you use for runs with more than 1 node depend on the configuration of your system, so please adapt accordingly.
 
