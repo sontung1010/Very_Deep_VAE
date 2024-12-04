@@ -1,0 +1,37 @@
+# Ignore Python bytecode and cache
+__pycache__/
+*.py[cod]
+
+# Ignore dataset and related folders
+cifar-10-batches-py/
+*.tar.gz
+
+# Ignore virtual environments
+env/
+venv/
+*.egg-info/
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore temporary and log files
+*.tmp
+*.temp
+*.log
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE-specific settings
+.vscode/
+.idea/
+
+# Ignore environment-specific configurations
+*.env
+.env.*
+
+# Ignore output folders and unnecessary images
+saved_images/
+output/
+*.png
