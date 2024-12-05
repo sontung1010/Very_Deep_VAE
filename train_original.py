@@ -11,47 +11,27 @@ from train_helpers import set_up_hyperparams, load_vaes, load_opt, accumulate_st
 
 # Reconstructing code
 
-def check_nans(forward_result):
-    distortion_nans = torch.isnan(forward_result['distortion']).sum()
-    rate_nans = torch.isnan(forward_result['rate']).sum()
-    return_dict = {
-        'rate_nans': 0 if rate_nans == 0 else 1,
-        'distortion_nans': 0 if distortion_nans == 0 else 1
-    }
-    return return_dict
-
-def training_step(H, data_input, target, vae_model, ema_vae, optimizer, iterate):
-    start_time = time.time()
-    
-    # initialize gradient for back prop
-    vae_model.zero_grad()
-
-    # Folowing output is from vae forward function
-    # three information is included in this forward_result
-    # {elbo, distortion, rate}
-    forward_result = vae_model.forward(data_input, target)
-
-    # using elbo loss fucntion
-    forward_result['elbo'].backward()
-
-    # limiting gradient value to H.grad_clip
-    grad_norm = torch.nn.utils.clip_grad_norm_(vae_model.parameters(), H.grad_clip).item()
-
-    # check for norm value in distortion and rate
-    return_dict = check_nans(forward_result)
-    forward_result.update(return_dict)
-    forward_result = get_cpu_stats_over_ranks(forward_result)
+def training_step(H, data_input, target, vae, ema_vae, optimizer, iterate):
+    t0 = time.time()
+    vae.zero_grad()
+    stats = vae.forward(data_input, target)
+    stats['elbo'].backward()
+    grad_norm = torch.nn.utils.clip_grad_norm_(vae.parameters(), H.grad_clip).item()
+    distortion_nans = torch.isnan(stats['distortion']).sum()
+    rate_nans = torch.isnan(stats['rate']).sum()
+    stats.update(dict(rate_nans=0 if rate_nans == 0 else 1, distortion_nans=0 if distortion_nans == 0 else 1))
+    stats = get_cpu_stats_over_ranks(stats)
 
     skipped_updates = 1
     # only update if no rank has a nan and if the grad norm is below a specific threshold
-    if forward_result['distortion_nans'] == 0 and forward_result['rate_nans'] == 0 and (H.skip_threshold == -1 or grad_norm < H.skip_threshold):
+    if stats['distortion_nans'] == 0 and stats['rate_nans'] == 0 and (H.skip_threshold == -1 or grad_norm < H.skip_threshold):
         optimizer.step()
         skipped_updates = 0
-        update_ema(vae_model, ema_vae, H.ema_rate)
+        update_ema(vae, ema_vae, H.ema_rate)
 
-    step_end_time = time.time()
-    forward_result.update(skipped_updates=skipped_updates, iter_time=step_end_time - start_time, grad_norm=grad_norm)
-    return forward_result
+    t1 = time.time()
+    stats.update(skipped_updates=skipped_updates, iter_time=t1 - t0, grad_norm=grad_norm)
+    return stats
 
 
 def eval_step(data_input, target, ema_vae):
