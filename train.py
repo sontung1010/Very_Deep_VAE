@@ -7,52 +7,10 @@ from torch.utils.data import DataLoader
 from data import set_up_data
 from utils import get_cpu_stats_over_ranks
 from train_helpers import set_up_hyperparams, load_vaes, load_opt, accumulate_stats, save_model, update_ema
+from utils_train import check_nans, create_logger
 
 
 # Reconstructing code
-
-def check_nans(forward_result):
-    distortion_nans = torch.isnan(forward_result['distortion']).sum()
-    rate_nans = torch.isnan(forward_result['rate']).sum()
-    return_dict = {
-        'rate_nans': 0 if rate_nans == 0 else 1,
-        'distortion_nans': 0 if distortion_nans == 0 else 1
-    }
-    return return_dict
-
-def training_step(H, data_input, target, vae_model, ema_vae, optimizer, iterate):
-    start_time = time.time()
-    
-    # initialize gradient for back prop
-    vae_model.zero_grad()
-
-    # Folowing output is from vae forward function
-    # three information is included in this forward_result
-    # {elbo, distortion, rate}
-    forward_result = vae_model.forward(data_input, target)
-
-    # using elbo loss fucntion
-    forward_result['elbo'].backward()
-
-    # limiting gradient value to H.grad_clip
-    grad_norm = torch.nn.utils.clip_grad_norm_(vae_model.parameters(), H.grad_clip).item()
-
-    # check for norm value in distortion and rate
-    return_dict = check_nans(forward_result)
-    forward_result.update(return_dict)
-    forward_result = get_cpu_stats_over_ranks(forward_result)
-
-    skipped_updates = 1
-    # only update if no rank has a nan and if the grad norm is below a specific threshold
-    if forward_result['distortion_nans'] == 0 and forward_result['rate_nans'] == 0 and (H.skip_threshold == -1 or grad_norm < H.skip_threshold):
-        optimizer.step()
-        skipped_updates = 0
-        update_ema(vae_model, ema_vae, H.ema_rate)
-
-    step_end_time = time.time()
-    forward_result.update(skipped_updates=skipped_updates, iter_time=step_end_time - start_time, grad_norm=grad_norm)
-    return forward_result
-
 
 def eval_step(data_input, target, ema_vae):
     with torch.no_grad():
@@ -69,7 +27,8 @@ def get_sample_for_visualization(data, preprocess_fn, num, dataset):
     return orig_image, preprocessed
 
 
-def train_loop(H, data_train, data_valid, preprocess_fn, vae, ema_vae, logprint):
+def train_main(H, data_train, data_valid, preprocess_fn, vae, ema_vae, logprint):
+    logger = create_logger("Training Logger")
     optimizer, scheduler, cur_eval_loss, iterate, starting_epoch = load_opt(H, vae, logprint)
     viz_batch_original, viz_batch_processed = get_sample_for_visualization(data_valid, preprocess_fn, H.num_images_visualize, H.dataset)
     early_evals = set([1] + [2 ** exp for exp in range(3, 14)])
@@ -79,7 +38,9 @@ def train_loop(H, data_train, data_valid, preprocess_fn, vae, ema_vae, logprint)
     H.ema_rate = torch.as_tensor(H.ema_rate).cuda()
 
     for epoch in range(starting_epoch, H.num_epochs):
-        train_loader = DataLoader(
+        print('\n\n')
+        print("Starting epoch", str(epoch))
+        traindata_loader = DataLoader(
             data_train,
             batch_size=H.n_batch,
             drop_last=True,
@@ -87,14 +48,50 @@ def train_loop(H, data_train, data_valid, preprocess_fn, vae, ema_vae, logprint)
             shuffle=True
         )
 
-        for x in train_loader:
+        for x in traindata_loader:
+            ## Starting single step
+            # =======================================================================
             data_input, target = preprocess_fn(x)
-            training_stats = training_step(H, data_input, target, vae, ema_vae, optimizer, iterate)
-            stats.append(training_stats)
+
+            step_start = time.time()
+            
+            # initialize gradient for back prop
+            vae.zero_grad()
+
+            # Folowing output is from vae forward function
+            # three information is included in this forward_result
+            # {elbo, distortion, rate}
+            forward_result = vae.forward(data_input, target)
+
+            # using elbo loss fucntion
+            forward_result['elbo'].backward()
+
+            # limiting gradient value to H.grad_clip
+            grad_norm = torch.nn.utils.clip_grad_norm_(vae.parameters(), H.grad_clip).item()
+
+            # check for norm value in distortion and rate
+            return_dict = check_nans(forward_result)
+            forward_result.update(return_dict)
+            
+
+            skipped_updates = 1
+            # only update if no rank has a nan and if the grad norm is below a specific threshold
+            if forward_result['distortion_nans'] == 0 and forward_result['rate_nans'] == 0 and (H.skip_threshold == -1 or grad_norm < H.skip_threshold):
+                optimizer.step()
+                skipped_updates = 0
+                update_ema(vae, ema_vae, H.ema_rate)
+
+            step_end = time.time()
+            step_duration = step_end - step_start
+            forward_result.update(skipped_updates=skipped_updates, iter_time=step_duration, grad_norm=grad_norm)
+            stats.append(forward_result)
+
+            ## End the step
+            # =======================================================================
 
             scheduler.step()
             if iterate % H.iters_per_print == 0 or iters_since_starting in early_evals:
-                logprint(model=H.desc, type='train_loss', lr=scheduler.get_last_lr()[0], epoch=epoch, step=iterate, **accumulate_stats(stats, H.iters_per_print))
+                logger.info(model=H.desc, type='train_loss', lr=scheduler.get_last_lr()[0], epoch=epoch, step=iterate, **accumulate_stats(stats, H.iters_per_print))
 
             if iterate % H.iters_per_images == 0 or (iters_since_starting in early_evals and H.dataset != 'ffhq_1024') and H.rank == 0:
                 write_images(H, ema_vae, viz_batch_original, viz_batch_processed, f'{H.save_dir}/samples-{iterate}.png', logprint)
@@ -170,7 +167,7 @@ def main():
     if H.test_eval:
         run_test_eval(H, ema_vae, data_valid_or_test, preprocess_fn, logprint)
     else:
-        train_loop(H, data_train, data_valid_or_test, preprocess_fn, vae, ema_vae, logprint)
+        train_main(H, data_train, data_valid_or_test, preprocess_fn, vae, ema_vae, logprint)
 
 
 if __name__ == "__main__":
