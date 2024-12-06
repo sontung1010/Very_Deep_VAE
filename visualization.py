@@ -35,3 +35,23 @@ def create_images(H, ema_vae, viz_batch_original, viz_batch_processed, fname, lo
     im_bgr = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
     logger.info('Printing samples to ' + str(fname))
     cv2.imwrite(fname, im_bgr)
+
+def formatting_text(stats):
+    try:
+        iteration_time = ' iteration_time: ' + str(stats['iter_time']) + ' '
+        elbo_str = 'elbo: ' + str(stats['elbo'].item()) + ' '
+        elbo_filtered_str = 'elbo_filtered: ' + str(stats['elbo_filtered'].item()) + ' '
+        rate_nans = 'rate_nans: ' + str(stats['rate_nans'].item()) + ' '
+        skipped_updates = 'skipped_updates: ' + str(stats['skipped_updates']) + ' '
+    except : return "Failed logging."
+    return iteration_time + elbo_str + elbo_filtered_str + rate_nans + skipped_updates
+
+def formatting_text_validation(stats):
+    try:
+        n_batches_str = ' n_batches: ' + str(stats['n_batches']) + ' '
+        elbo_str = 'elbo: ' + str(stats['elbo']) + ' '
+        elbo_filtered_str = 'elbo_filtered: ' + str(stats['filtered_elbo']) + ' '
+        rate_str = 'rate: ' + str(stats['rate']) + ' '
+        distortion_str = 'distortion: ' + str(stats['distortion']) + ' '
+    except : return "Failed logging."
+    return n_batches_str + elbo_str + elbo_filtered_str + rate_str + distortion_str

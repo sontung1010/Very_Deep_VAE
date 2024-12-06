@@ -9,15 +9,12 @@ from torch.utils.data import DataLoader
 
 # importing from another files
 from data import set_up_data
-from train_helpers import accumulate_stats, save_model, update_ema
-from utils_train import check_nans, create_logger, load_optimizer
-from visualization import create_images, get_displaying_data
-from train_setup import set_up_hyperparams, load_vaes
+from utils_train import check_nans, create_logger, load_optimizer, accumulate_stats, saving_model, update_ema
+from visualization import create_images, get_displaying_data, formatting_text, formatting_text_validation
+from train_setup import hyperparameter_setting, load_model_custom
 
 
-def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_vae):
-    logger = create_logger("Training Logger", log_file='training_log.txt')
-    
+def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_vae, logger):
     visualization_number = 8
     images_visualization_original, images_visualization_processed = get_displaying_data(validation_dataset, preprocess_fn, visualization_number, logger)
     stats = []
@@ -34,7 +31,7 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
         ## Creating a sample image display set
         # =======================================================================
         if epoch % H.epochs_per_eval == 0:
-            file_name =  f'{H.save_dir}/displaying_images_' + str(iterate) + '.png'
+            file_name =  f'{H.save_dir}/displaying_images_' + str(epoch) + '.png'
             create_images(H, ema_vae, images_visualization_original, images_visualization_processed, file_name, logger)
 
         ## Load data
@@ -71,39 +68,48 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
             step_end = time.time()
             step_duration = step_end - step_start
             forward_result.update(skipped_updates=skipped_updates, iter_time=step_duration, grad_norm=grad_norm)
-            stats.append(forward_result)
+            forward_result_numpy = {
+                key: (value.detach().cpu().numpy() if isinstance(value, torch.Tensor) else value)
+                for key, value in forward_result.items()
+            }
+            stats.append(forward_result_numpy)
+            # logger.debug('stats:'+str(stats))
 
             ## Updating the result
             # =======================================================================
             scheduler.step()
             if iterate % H.iters_per_print == 0:
-                logger.info("type: train_loss, lr: " + str(scheduler.get_last_lr()[0]) + ", epoch: " +str(epoch)+", step: " + str(iterate) + str(**accumulate_stats(stats, H.iters_per_print)))
+                accumulated = accumulate_stats(stats, H.iters_per_print)
+                format_text = formatting_text(accumulated)
+                logger.info("type: train_loss, lr: " + str(scheduler.get_last_lr()[0]) + ", epoch: " +str(epoch)+", step: " + str(iterate) + format_text)
             
             iterate += 1
             iters_since_starting += 1
             if iterate % H.iters_per_save == 0 and H.rank == 0:
                 if np.isfinite(stats[-1]['elbo']):
-                    logger.info("type: train_loss, lr: " + str(scheduler.get_last_lr()[0]) + ", epoch: " +str(epoch)+", step: " + str(iterate) + str(**accumulate_stats(stats, H.iters_per_print)))
+                    accumulated = accumulate_stats(stats, H.iters_per_print)
+                    format_text = formatting_text(accumulated)                    
+                    logger.info("type: train_loss, lr: " + str(scheduler.get_last_lr()[0]) + ", epoch: " +str(epoch)+", step: " + str(iterate) + format_text)
                     fp = os.path.join(H.save_dir, 'latest')
                     logger.info('Saving model ' + str(iterate) + " to " + str(fp))
-                    save_model(fp, vae, ema_vae, optimizer, H)
-
-            if iterate % H.iters_per_ckpt == 0 and H.rank == 0:
-                save_model(os.path.join(H.save_dir, f'iter-{iterate}'), vae, ema_vae, optimizer, H)
+                    saving_model(epoch, fp, vae, ema_vae, optimizer, H)              
             
-            epoch_end = time.time()
-            epoch_duration = epoch_end - epoch_start
-            logger.info("1 Epoch Finished - duration:"+ str(epoch_duration))
+        epoch_end = time.time()
+        epoch_duration = epoch_end - epoch_start
+        logger.info("1 Epoch Finished - duration:"+ str(epoch_duration))
 
         ## Validation
         # =======================================================================
         if epoch % H.epochs_per_eval == 0:
-            valid_stats = validation_main(H, ema_vae, validation_dataset, preprocess_fn)
-            logger.info("type: eval_loss, epoch: " + str(epoch) + ", step: " + str(iterate) + str(**valid_stats))
+            valid_stats = validation_main(H, ema_vae, validation_dataset, preprocess_fn, logger)
+            valid_stats_text = formatting_text_validation(valid_stats)
+            logger.info("type: eval_loss, epoch: " + str(epoch) + ", step: " + str(iterate) + str(valid_stats_text))
+            saving_model(epoch, os.path.join(H.save_dir, f'iter-{iterate}'), vae, ema_vae, optimizer, H)
 
 
-def validation_main(H, ema_vae, data_valid, preprocess_fn):
+def validation_main(H, ema_vae, data_valid, preprocess_fn, logger):
     print('\n\n')
+    logger.info("Intiating validation.")
     stats_valid = []
     ## Load data
     # =======================================================================
@@ -117,10 +123,12 @@ def validation_main(H, ema_vae, data_valid, preprocess_fn):
         ## Starting validation step
         # =======================================================================
         input_image, target_image = preprocess_fn(x)
-        with torch.no_grad() : stats = ema_vae.forward(input_image, target_image)
-        keys = sorted(stats.keys())
-        stats_output = {k: float(stats[k]) for k in keys}    
-        stats_valid.append(stats_output)
+        with torch.no_grad() : forward_result = ema_vae.forward(input_image, target_image)
+        forward_result_numpy = {
+            key: (value.detach().cpu().numpy() if isinstance(value, torch.Tensor) else value)
+            for key, value in forward_result.items()
+        }
+        stats_valid.append(forward_result_numpy)
     vals = [a['elbo'] for a in stats_valid]
     finites = np.array(vals)[np.isfinite(vals)]
     stats = dict(
@@ -131,26 +139,27 @@ def validation_main(H, ema_vae, data_valid, preprocess_fn):
     return stats
 
 
-def test_main(H, ema_vae, data_test, preprocess_fn):
+def test_main(H, ema_vae, data_test, preprocess_fn, logger):
     print('\n\n')
-    logger = create_logger("Testing Logger", log_file="test_log.txt")
     logger.info("Starting testing phase.")
-    stats = validation_main(H, ema_vae, data_test, preprocess_fn)
+    stats = validation_main(H, ema_vae, data_test, preprocess_fn, logger)
     logger.info("Test results:")
-    print('=' * 50)
+    logger.info('=' * 50)
     for key, value in stats.items():
-        print(f"{key}: {value}")
-    logger.info("type: test_loss, "+ str(**stats))
+        logger.info(f"{key}: {value}")
+    test_stats_text = formatting_text_validation(stats)
+    logger.info("type: test_loss, "+ str(test_stats_text))
 
 
 def main():
-    H, logprint = set_up_hyperparams()
-    H, data_train, data_valid_or_test, preprocess_fn = set_up_data(H)
-    vae, ema_vae = load_vaes(H, logprint)
-    if H.test_eval:
-        test_main(H, ema_vae, data_valid_or_test, preprocess_fn)
+    logger = create_logger("Training Logger", log_file='training_log.txt')
+    Parameters = hyperparameter_setting(logger)
+    Parameters, data_train, data_valid_or_test, preprocess_fn = set_up_data(Parameters)
+    vae, ema_vae = load_model_custom(Parameters, logger)
+    if Parameters.test_eval:
+        test_main(Parameters, ema_vae, data_valid_or_test, preprocess_fn, logger)
     else:
-        train_main(H, data_train, data_valid_or_test, preprocess_fn, vae, ema_vae)
+        train_main(Parameters, data_train, data_valid_or_test, preprocess_fn, vae, ema_vae, logger)
 
 
 if __name__ == "__main__":

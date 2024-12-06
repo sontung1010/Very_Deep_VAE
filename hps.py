@@ -69,25 +69,6 @@ ffhq_256.skip_threshold = 180.
 HPARAMS_REGISTRY['ffhq256'] = ffhq_256
 
 
-ffhq1024 = Hyperparams()
-ffhq1024.update(ffhq_256)
-ffhq1024.dataset = 'ffhq_1024'
-ffhq1024.data_root = './ffhq_images1024x1024'
-ffhq1024.epochs_per_eval = 1
-ffhq1024.epochs_per_eval_save = 1
-ffhq1024.num_images_visualize = 1
-ffhq1024.iters_per_images = 25000
-ffhq1024.num_variables_visualize = 0
-ffhq1024.num_temperatures_visualize = 4
-ffhq1024.grad_clip = 360.
-ffhq1024.skip_threshold = 500.
-ffhq1024.num_mixtures = 2
-ffhq1024.width = 16
-ffhq1024.lr = 0.00007
-ffhq1024.dec_blocks = "1x2,4m1,4x3,8m4,8x4,16m8,16x9,32m16,32x20,64m32,64x14,128m64,128x7,256m128,256x2,512m256,1024m512"
-ffhq1024.enc_blocks = "1024x1,1024d2,512x3,512d2,256x5,256d2,128x7,128d2,64x10,64d2,32x14,32d2,16x7,16d2,8x5,8d2,4x5,4d4,1x4"
-ffhq1024.custom_width_str = "512:32,256:64,128:512,64:512,32:512,16:512,8:512,4:512,1:512"
-HPARAMS_REGISTRY['ffhq1024'] = ffhq1024
 
 
 def parse_args_and_update_hparams(H, parser, s=None):
@@ -146,11 +127,11 @@ def add_vae_arguments(parser):
 
     parser.add_argument('--temperature', type=float, default=1.0)
 
-    parser.add_argument('--iters_per_ckpt', type=int, default=25000)
-    parser.add_argument('--iters_per_print', type=int, default=1000)
-    parser.add_argument('--iters_per_save', type=int, default=10000)
-    parser.add_argument('--iters_per_images', type=int, default=10000)
-    parser.add_argument('--epochs_per_eval', type=int, default=10)
+    parser.add_argument('--iters_per_ckpt', type=int, default=2500)
+    parser.add_argument('--iters_per_print', type=int, default=100)
+    parser.add_argument('--iters_per_save', type=int, default=1000)
+    parser.add_argument('--iters_per_images', type=int, default=1000)
+    parser.add_argument('--epochs_per_eval', type=int, default=1)
     parser.add_argument('--epochs_per_probe', type=int, default=None)
     parser.add_argument('--epochs_per_eval_save', type=int, default=20)
     parser.add_argument('--num_images_visualize', type=int, default=8)
