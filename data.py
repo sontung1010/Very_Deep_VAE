@@ -23,20 +23,6 @@ def set_up_data(H):
         H.image_channels = 3
         shift = -115.92961967
         scale = 1. / 69.37404
-    elif H.dataset == 'ffhq_256':
-        trX, vaX, teX = ffhq256(H.data_root)
-        H.image_size = 256
-        H.image_channels = 3
-        shift = -112.8666757481
-        scale = 1. / 69.84780273
-    elif H.dataset == 'ffhq_1024':
-        trX, vaX, teX = ffhq1024(H.data_root)
-        H.image_size = 1024
-        H.image_channels = 3
-        shift = -0.4387
-        scale = 1.0 / 0.2743
-        shift_loss = -0.5
-        scale_loss = 2.0
     elif H.dataset == 'cifar10':
         (trX, _), (vaX, _), (teX, _) = cifar10(H.data_root, one_hot=False)
         H.image_size = 32
@@ -125,22 +111,6 @@ def imagenet64(data_root):
     valid = trX[tr_va_split_indices[-5000:]]
     test = np.load(os.path.join(data_root, 'imagenet64-valid.npy'), mmap_mode='r')  # this is test.
     return train, valid, test
-
-
-def ffhq1024(data_root):
-    # we did not significantly tune hyperparameters on ffhq-1024, and so simply evaluate on the test set
-    return os.path.join(data_root, 'ffhq1024/train'), os.path.join(data_root, 'ffhq1024/valid'), os.path.join(data_root, 'ffhq1024/valid')
-
-
-def ffhq256(data_root):
-    trX = np.load(os.path.join(data_root, 'ffhq-256.npy'), mmap_mode='r')
-    np.random.seed(5)
-    tr_va_split_indices = np.random.permutation(trX.shape[0])
-    train = trX[tr_va_split_indices[:-7000]]
-    valid = trX[tr_va_split_indices[-7000:]]
-    # we did not significantly tune hyperparameters on ffhq-256, and so simply evaluate on the test set
-    return train, valid, valid
-
 
 def cifar10(data_root, one_hot=True):
     tr_data = [unpickle_cifar10(os.path.join(data_root, 'cifar-10-batches-py/', 'data_batch_%d' % i)) for i in range(1, 6)]
