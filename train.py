@@ -28,7 +28,7 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
 
     for epoch in range(starting_epoch, H.num_epochs):
         print('\n\n')
-        logger.info("Starting epoch", str(epoch))
+        logger.info("Starting epoch" + str(epoch))
         epoch_start = time.time()
 
         ## Creating a sample image display set
@@ -77,15 +77,15 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
             # =======================================================================
             scheduler.step()
             if iterate % H.iters_per_print == 0:
-                logger.info(model=H.desc, type='train_loss', lr=scheduler.get_last_lr()[0], epoch=epoch, step=iterate, **accumulate_stats(stats, H.iters_per_print))
+                logger.info("type: train_loss, lr: " + str(scheduler.get_last_lr()[0]) + ", epoch: " +str(epoch)+", step: " + str(iterate) + str(**accumulate_stats(stats, H.iters_per_print)))
             
             iterate += 1
             iters_since_starting += 1
             if iterate % H.iters_per_save == 0 and H.rank == 0:
                 if np.isfinite(stats[-1]['elbo']):
-                    logger.info(model=H.desc, type='train_loss', epoch=epoch, step=iterate, **accumulate_stats(stats, H.iters_per_print))
+                    logger.info("type: train_loss, lr: " + str(scheduler.get_last_lr()[0]) + ", epoch: " +str(epoch)+", step: " + str(iterate) + str(**accumulate_stats(stats, H.iters_per_print)))
                     fp = os.path.join(H.save_dir, 'latest')
-                    logger.info(f'Saving model@ {iterate} to {fp}')
+                    logger.info('Saving model ' + str(iterate) + " to " + str(fp))
                     save_model(fp, vae, ema_vae, optimizer, H)
 
             if iterate % H.iters_per_ckpt == 0 and H.rank == 0:
@@ -93,13 +93,13 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
             
             epoch_end = time.time()
             epoch_duration = epoch_end - epoch_start
-            logger.info("1 Epoch Finished - duration:", epoch_duration)
+            logger.info("1 Epoch Finished - duration:"+ str(epoch_duration))
 
         ## Validation
         # =======================================================================
         if epoch % H.epochs_per_eval == 0:
             valid_stats = validation_main(H, ema_vae, validation_dataset, preprocess_fn)
-            logger.info(model=H.desc, type='eval_loss', epoch=epoch, step=iterate, **valid_stats)
+            logger.info("type: eval_loss, epoch: " + str(epoch) + ", step: " + str(iterate) + str(**valid_stats))
 
 
 def validation_main(H, ema_vae, data_valid, preprocess_fn):
@@ -140,7 +140,7 @@ def test_main(H, ema_vae, data_test, preprocess_fn):
     print('=' * 50)
     for key, value in stats.items():
         print(f"{key}: {value}")
-    logger.info(type='test_loss', **stats)
+    logger.info("type: test_loss, "+ str(**stats))
 
 
 def main():

@@ -12,7 +12,7 @@ def get_displaying_data(data, preprocess_fn, num, logger):
     logger.debug(f"Preprocessed image shape: {preprocessed_image.shape}")
     return original_image, preprocessed_image
 
-def create_images(H, ema_vae, viz_batch_original, viz_batch_processed, fname, logprint):
+def create_images(H, ema_vae, viz_batch_original, viz_batch_processed, fname, logger):
     zs = [s['z'].cuda() for s in ema_vae.forward_get_latents(viz_batch_processed)]
     batches = [viz_batch_original.numpy()]
     mb = viz_batch_processed.shape[0]
@@ -33,5 +33,5 @@ def create_images(H, ema_vae, viz_batch_original, viz_batch_processed, fname, lo
     )
     
     im_bgr = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
-    logprint(f'Printing samples to {fname}')
+    logger.info('Printing samples to ' + str(fname))
     cv2.imwrite(fname, im_bgr)

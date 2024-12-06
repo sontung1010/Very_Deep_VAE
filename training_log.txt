@@ -1,0 +1,12 @@
+2024-12-06 00:14:59,990 - DEBUG - Original image shape: torch.Size([8, 32, 32, 3])
+2024-12-06 00:15:00,020 - DEBUG - Preprocessed image shape: torch.Size([8, 32, 32, 3])
+2024-12-06 00:15:00,022 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-06 00:19:19,706 - DEBUG - Original image shape: torch.Size([8, 32, 32, 3])
+2024-12-06 00:19:19,736 - DEBUG - Preprocessed image shape: torch.Size([8, 32, 32, 3])
+2024-12-06 00:19:19,738 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-06 00:19:21,650 - INFO - Printing samples to ./saved_models\test/displaying_images_0.png
+2024-12-06 00:51:44,551 - DEBUG - Original image shape: torch.Size([8, 32, 32, 3])
+2024-12-06 00:51:44,580 - DEBUG - Preprocessed image shape: torch.Size([8, 32, 32, 3])
+2024-12-06 00:51:44,582 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-06 00:51:44,582 - INFO - Starting epoch0
+2024-12-06 00:51:46,483 - INFO - Printing samples to ./saved_models\test/displaying_images_0.png
