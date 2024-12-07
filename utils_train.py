@@ -75,7 +75,7 @@ def saving_model(epoch, path, vae, ema_vae, optimizer, H):
     shutil.copy(log_from, log_to)
 
 
-def accumulate_stats(stats, frequency):
+def stats_batch_processing(stats, frequency):
     def safe_mean(values):
         return np.mean(values) if len(values) > 0 else 0.0
     def safe_max(values):

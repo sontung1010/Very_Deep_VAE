@@ -532,3 +532,87 @@
 2024-12-06 17:29:57,164 - INFO - type:hparam, key= zdim value= 16
 2024-12-06 17:29:57,166 - INFO - training model test on cifar10
 2024-12-06 17:29:58,528 - INFO - total_params= 39145700, readable= 39,145,700
+2024-12-06 17:30:41,320 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-06 17:30:41,320 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-06 17:30:41,320 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= data_root value= ./
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= dataset value= cifar10
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= desc value= test
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= hparam_sets value= cifar10
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= logdir value= ./saved_models\test\log
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-06 17:30:41,321 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= n_batch value= 16
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= num_epochs value= 10000
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= port value= 29500
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= restore_path value= None
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= save_dir value= ./saved_models\test
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= seed value= 0
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-06 17:30:41,322 - INFO - type:hparam, key= test_eval value= False
+2024-12-06 17:30:41,323 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-06 17:30:41,323 - INFO - type:hparam, key= wd value= 0.01
+2024-12-06 17:30:41,323 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-06 17:30:41,323 - INFO - type:hparam, key= width value= 384
+2024-12-06 17:30:41,323 - INFO - type:hparam, key= zdim value= 16
+2024-12-06 17:30:41,324 - INFO - training model test on cifar10
+2024-12-06 17:30:42,754 - INFO - total_params= 39145700, readable= 39,145,700
+2024-12-06 17:30:42,826 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-06 17:30:42,826 - INFO - Starting epoch0
+2024-12-06 17:30:44,876 - INFO - Printing samples to ./saved_models\test/displaying_images_0.png
+2024-12-06 17:30:47,003 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 0 iteration_time: 2.1214277744293213 elbo: 6.292140483856201 elbo_filtered: 6.292140483856201 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:31:26,580 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 100 iteration_time: 0.394858181476593 elbo: 5.023038864135742 elbo_filtered: 5.023038864135742 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:32:06,793 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 200 iteration_time: 0.40119930505752566 elbo: 4.440958023071289 elbo_filtered: 4.440958023071289 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:32:46,671 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 300 iteration_time: 0.3979197001457214 elbo: 4.11310338973999 elbo_filtered: 4.11310338973999 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:33:26,788 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 400 iteration_time: 0.40032397985458373 elbo: 3.9363532066345215 elbo_filtered: 3.9363532066345215 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:34:06,070 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 500 iteration_time: 0.3919195246696472 elbo: 3.840686082839966 elbo_filtered: 3.840686082839966 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:34:46,331 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 600 iteration_time: 0.40175408124923706 elbo: 3.7632479667663574 elbo_filtered: 3.7632479667663574 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:35:26,789 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 700 iteration_time: 0.4036636519432068 elbo: 3.711000442504883 elbo_filtered: 3.711000442504883 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:36:06,843 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 800 iteration_time: 0.39970366954803466 elbo: 3.660396099090576 elbo_filtered: 3.660396099090576 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:36:48,271 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 900 iteration_time: 0.4133774709701538 elbo: 3.6485486030578613 elbo_filtered: 3.6485486030578613 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:37:26,723 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 1000 iteration_time: 0.3836474275588989 elbo: 3.6100265979766846 elbo_filtered: 3.6100265979766846 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:38:03,451 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 1100 iteration_time: 0.3664627265930176 elbo: 3.5587005615234375 elbo_filtered: 3.5587005615234375 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:38:40,220 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 1200 iteration_time: 0.366888735294342 elbo: 3.5256786346435547 elbo_filtered: 3.5256786346435547 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:39:17,441 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 1300 iteration_time: 0.37138866901397705 elbo: 3.5359597206115723 elbo_filtered: 3.5359597206115723 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:39:55,848 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 1400 iteration_time: 0.38326446533203123 elbo: 3.5237231254577637 elbo_filtered: 3.5237231254577637 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:40:33,783 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 1500 iteration_time: 0.3783984041213989 elbo: 3.486790180206299 elbo_filtered: 3.486790180206299 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:41:12,319 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 1600 iteration_time: 0.38455228090286253 elbo: 3.462233781814575 elbo_filtered: 3.462233781814575 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:41:50,983 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 1700 iteration_time: 0.3857831883430481 elbo: 3.4605791568756104 elbo_filtered: 3.4605791568756104 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:42:30,249 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 1800 iteration_time: 0.3917944884300232 elbo: 3.422161817550659 elbo_filtered: 3.422161817550659 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:43:09,614 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 1900 iteration_time: 0.39280388355255125 elbo: 3.3990907669067383 elbo_filtered: 3.3990907669067383 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:43:48,453 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 2000 iteration_time: 0.3875534415245056 elbo: 3.3916726112365723 elbo_filtered: 3.3916726112365723 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:44:29,209 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 2100 iteration_time: 0.4066736173629761 elbo: 3.371675968170166 elbo_filtered: 3.371675968170166 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:45:08,670 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 2200 iteration_time: 0.3937065863609314 elbo: 3.3329296112060547 elbo_filtered: 3.3329296112060547 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:45:48,122 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 2300 iteration_time: 0.393668909072876 elbo: 3.357607841491699 elbo_filtered: 3.357607841491699 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:46:28,300 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 2400 iteration_time: 0.40092523097991944 elbo: 3.3068041801452637 elbo_filtered: 3.3068041801452637 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:47:07,443 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 2500 iteration_time: 0.3904940676689148 elbo: 3.3203461170196533 elbo_filtered: 3.3203461170196533 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:47:44,704 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 2600 iteration_time: 0.37180877923965455 elbo: 3.2806878089904785 elbo_filtered: 3.2806878089904785 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:48:21,939 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 2700 iteration_time: 0.3714731478691101 elbo: 3.263385534286499 elbo_filtered: 3.263385534286499 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:48:58,775 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 2800 iteration_time: 0.36754990100860596 elbo: 3.2933127880096436 elbo_filtered: 3.2933127880096436 rate_nans: 0 skipped_updates: 0 
+2024-12-06 17:49:02,995 - INFO - 1 Epoch Finished - duration:1100.1679639816284
+2024-12-06 17:49:02,995 - INFO - Intiating validation.
+2024-12-06 17:49:36,386 - INFO - type: eval_loss, epoch: 0, step: 2812 n_batches: 312 elbo: 5.9317575 elbo_filtered: 5.9317575 rate: 0.017854678 distortion: 5.9139023 
+2024-12-06 17:49:37,420 - INFO - Starting epoch1
+2024-12-06 17:49:37,854 - INFO - Printing samples to ./saved_models\test/displaying_images_1.png

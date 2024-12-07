@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 
 # importing from another files
 from data import set_up_data
-from utils_train import check_nans, create_logger, load_optimizer, accumulate_stats, saving_model, update_ema
+from utils_train import check_nans, create_logger, load_optimizer, stats_batch_processing, saving_model, update_ema
 from visualization import create_images, get_displaying_data, formatting_text, formatting_text_validation
 from train_setup import hyperparameter_setting, load_model_custom
 
@@ -79,7 +79,7 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
             # =======================================================================
             scheduler.step()
             if iterate % H.iters_per_print == 0:
-                accumulated = accumulate_stats(stats, H.iters_per_print)
+                accumulated = stats_batch_processing(stats, H.iters_per_print)
                 format_text = formatting_text(accumulated)
                 logger.info("type: train_loss, lr: " + str(scheduler.get_last_lr()[0]) + ", epoch: " +str(epoch)+", step: " + str(iterate) + format_text)
             
@@ -87,7 +87,7 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
             iters_since_starting += 1
             if iterate % H.iters_per_save == 0 and H.rank == 0:
                 if np.isfinite(stats[-1]['elbo']):
-                    accumulated = accumulate_stats(stats, H.iters_per_print)
+                    accumulated = stats_batch_processing(stats, H.iters_per_print)
                     format_text = formatting_text(accumulated)                    
                     logger.info("type: train_loss, lr: " + str(scheduler.get_last_lr()[0]) + ", epoch: " +str(epoch)+", step: " + str(iterate) + format_text)
                     fp = os.path.join(H.save_dir, 'latest')
