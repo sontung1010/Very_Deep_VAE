@@ -2,132 +2,99 @@ import numpy as np
 import pickle
 import os
 import torch
-from torch.utils.data import TensorDataset
+from torch.utils.data import Dataset, TensorDataset
 from torchvision.datasets import ImageFolder
 import torchvision.transforms as transforms
 from sklearn.model_selection import train_test_split
 
+class CustomDataset(Dataset):
+    def __init__(self, data):
+        self.data = data
+    def __getitem__(self, index):
+        item = self.data[index]
+        #item = item.unsqueeze(0)
+        return item
+    def __len__(self):
+        return len(self.data)
 
-def set_up_data(H):
-    shift_loss = -127.5
-    scale_loss = 1. / 127.5
-    if H.dataset == 'imagenet32':
-        trX, vaX, teX = imagenet32(H.data_root)
-        H.image_size = 32
-        H.image_channels = 3
-        shift = -116.2373
-        scale = 1. / 69.37404
-    elif H.dataset == 'imagenet64':
-        trX, vaX, teX = imagenet64(H.data_root)
-        H.image_size = 64
-        H.image_channels = 3
-        shift = -115.92961967
-        scale = 1. / 69.37404
-    elif H.dataset == 'cifar10':
-        (trX, _), (vaX, _), (teX, _) = cifar10(H.data_root, one_hot=False)
-        H.image_size = 32
-        H.image_channels = 3
-        shift = -120.63838
-        scale = 1. / 64.16736
+def prepare_data(config):
+    normalization_params = {
+        'cifar10': {'shift': -120.63838, 'scale': 1. / 64.16736},
+        'imagenet32': {'shift': -116.2373, 'scale': 1. / 69.37404},
+        'imagenet64': {'shift': -115.92961967, 'scale': 1. / 69.37404},
+    }
+    loss_params = {'shift_loss': -127.5, 'scale_loss': 1. / 127.5}
+
+    if config.dataset not in normalization_params:
+        raise ValueError(f"Dataset '{config.dataset}' is not recognized!")
+    if config.dataset == 'imagenet32':
+        train_data, val_data, test_data = load_imagenet32(config.data_root)
+        config.image_size, config.image_channels = 32, 3
+    elif config.dataset == 'imagenet64':
+        train_data, val_data, test_data = load_imagenet64(config.data_root)
+        config.image_size, config.image_channels = 64, 3
+    elif config.dataset == 'cifar10':
+        train_data, val_data, test_data = load_cifar10(config.data_root)
+        config.image_size, config.image_channels = 32, 3
     else:
-        raise ValueError('unknown dataset: ', H.dataset)
+        raise ValueError(f"Dataset '{config.dataset}' is not recognized!")
 
-    do_low_bit = H.dataset in ['ffhq_256']
-
-    if H.test_eval:
-        print('DOING TEST')
-        eval_dataset = teX
+    if config.test_eval:
+        print("test dataset is validation set")
+        eval_data = test_data
     else:
-        eval_dataset = vaX
+        print("seperate test set")
+        eval_data = val_data
+    shift, scale = map_to_tensor(normalization_params[config.dataset])
+    shift_loss, scale_loss = map_to_tensor(loss_params)
+    train_dataset = CustomDataset(torch.as_tensor(train_data))
+    eval_dataset = CustomDataset(torch.as_tensor(eval_data))
+    transpose_required = False
 
-    shift = torch.tensor([shift]).cuda().view(1, 1, 1, 1)
-    scale = torch.tensor([scale]).cuda().view(1, 1, 1, 1)
-    shift_loss = torch.tensor([shift_loss]).cuda().view(1, 1, 1, 1)
-    scale_loss = torch.tensor([scale_loss]).cuda().view(1, 1, 1, 1)
+    def preprocess(data_batch):
+        nonlocal shift, scale, shift_loss, scale_loss, transpose_required
+        inputs = data_batch[0].to(torch.float32).cuda(non_blocking=True)
+        outputs = inputs.clone()
 
-    if H.dataset == 'ffhq_1024':
-        train_data = ImageFolder(trX, transforms.ToTensor())
-        valid_data = ImageFolder(eval_dataset, transforms.ToTensor())
-        untranspose = True
-    else:
-        train_data = TensorDataset(torch.as_tensor(trX))
-        valid_data = TensorDataset(torch.as_tensor(eval_dataset))
-        untranspose = False
+        if transpose_required:
+            inputs = inputs.permute(0, 2, 3, 1)
 
-    def preprocess_func(x):
-        nonlocal shift
-        nonlocal scale
-        nonlocal shift_loss
-        nonlocal scale_loss
-        nonlocal do_low_bit
-        nonlocal untranspose
-        'takes in a data example and returns the preprocessed input'
-        'as well as the input processed for the loss'
-        if untranspose:
-            x[0] = x[0].permute(0, 2, 3, 1)
-        inp = x[0].cuda(non_blocking=True).float()
-        out = inp.clone()
-        inp.add_(shift).mul_(scale)
-        if do_low_bit:
-            # 5 bits of precision
-            out.mul_(1. / 8.).floor_().mul_(8.)
-        out.add_(shift_loss).mul_(scale_loss)
-        return inp, out
+        inputs.add_(shift).mul_(scale)
+        outputs.add_(shift_loss).mul_(scale_loss)
+        return inputs, outputs
 
-    return H, train_data, valid_data, preprocess_func
+    return config, train_dataset, eval_dataset, preprocess
 
 
-def mkdir_p(path):
+def map_to_tensor(params):
+    return_value = {value: torch.tensor([value]).cuda().view(1, 1, 1, 1) for key, value in params.items()}
+    return return_value
+
+
+def load_imagenet32(root):
+    train_data = np.load(os.path.join(root, 'imagenet32-train.npy'), mmap_mode='r')
+    indices = np.random.permutation(train_data.shape[0])
+    return train_data[indices[:-5000]], train_data[indices[-5000:]], np.load(os.path.join(root, 'imagenet32-valid.npy'))
+
+def mkdir_from_path(path):
     os.makedirs(path, exist_ok=True)
 
-
-def flatten(outer):
-    return [el for inner in outer for el in inner]
-
-
-def unpickle_cifar10(file):
-    fo = open(file, 'rb')
-    data = pickle.load(fo, encoding='bytes')
-    fo.close()
-    data = dict(zip([k.decode() for k in data.keys()], data.values()))
-    return data
+def load_imagenet64(root):
+    train_data = np.load(os.path.join(root, 'imagenet64-train.npy'), mmap_mode='r')
+    indices = np.random.permutation(train_data.shape[0])
+    return train_data[indices[:-5000]], train_data[indices[-5000:]], np.load(os.path.join(root, 'imagenet64-valid.npy'))
 
 
-def imagenet32(data_root):
-    trX = np.load(os.path.join(data_root, 'imagenet32-train.npy'), mmap_mode='r')
-    np.random.seed(42)
-    tr_va_split_indices = np.random.permutation(trX.shape[0])
-    train = trX[tr_va_split_indices[:-5000]]
-    valid = trX[tr_va_split_indices[-5000:]]
-    test = np.load(os.path.join(data_root, 'imagenet32-valid.npy'), mmap_mode='r')
-    return train, valid, test
+def load_cifar10(root):
+    def unpickle(file):
+        with open(file, 'rb') as f:
+            return pickle.load(f, encoding='bytes')
 
+    train_batches = [unpickle(os.path.join(root, 'cifar-10-batches-py', f'data_batch_{i}')) for i in range(1, 6)]
+    train_data = np.vstack([batch[b'data'] for batch in train_batches])
+    test_data = unpickle(os.path.join(root, 'cifar-10-batches-py', 'test_batch'))[b'data']
 
-def imagenet64(data_root):
-    trX = np.load(os.path.join(data_root, 'imagenet64-train.npy'), mmap_mode='r')
-    np.random.seed(42)
-    tr_va_split_indices = np.random.permutation(trX.shape[0])
-    train = trX[tr_va_split_indices[:-5000]]
-    valid = trX[tr_va_split_indices[-5000:]]
-    test = np.load(os.path.join(data_root, 'imagenet64-valid.npy'), mmap_mode='r')  # this is test.
-    return train, valid, test
-
-def cifar10(data_root, one_hot=True):
-    tr_data = [unpickle_cifar10(os.path.join(data_root, 'cifar-10-batches-py/', 'data_batch_%d' % i)) for i in range(1, 6)]
-    trX = np.vstack(data['data'] for data in tr_data)
-    trY = np.asarray(flatten([data['labels'] for data in tr_data]))
-    te_data = unpickle_cifar10(os.path.join(data_root, 'cifar-10-batches-py/', 'test_batch'))
-    teX = np.asarray(te_data['data'])
-    teY = np.asarray(te_data['labels'])
-    trX = trX.reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
-    teX = teX.reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
-    trX, vaX, trY, vaY = train_test_split(trX, trY, test_size=5000, random_state=11172018)
-    if one_hot:
-        trY = np.eye(10, dtype=np.float32)[trY]
-        vaY = np.eye(10, dtype=np.float32)[vaY]
-        teY = np.eye(10, dtype=np.float32)[teY]
-    else:
-        trY = np.reshape(trY, [-1, 1])
-        vaY = np.reshape(vaY, [-1, 1])
-        teY = np.reshape(teY, [-1, 1])
-    return (trX, trY), (vaX, vaY), (teX, teY)
+    train_data = train_data.reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
+    test_data = test_data.reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
+    train_data, val_data = train_test_split(train_data, test_size=5000, random_state=42)
+    return train_data, val_data, test_data

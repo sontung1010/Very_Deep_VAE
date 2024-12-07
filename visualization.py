@@ -6,9 +6,9 @@ from torch.utils.data import DataLoader
 def get_displaying_data(data, preprocess_fn, num, logger):
     dataloader = DataLoader(data, batch_size=num)
     x = next(iter(dataloader))
-    original_image = x[0]
+    original_image = x
     logger.debug(f"Original image shape: {original_image.shape}")
-    preprocessed_image = preprocess_fn(x)[0]
+    preprocessed_image = preprocess_fn([x])[0]
     logger.debug(f"Preprocessed image shape: {preprocessed_image.shape}")
     return original_image, preprocessed_image
 

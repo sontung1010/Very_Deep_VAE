@@ -8,13 +8,19 @@ import torch
 from torch.utils.data import DataLoader
 
 # importing from another files
-from data import set_up_data
-from utils_train import check_nans, create_logger, load_optimizer, stats_batch_processing, saving_model, update_ema
+from data import prepare_data
+from utils_train import check_nans, create_logger, load_optimizer, stats_batch_processing, saving_model, update_ema, add_row_train, add_row_val
 from visualization import create_images, get_displaying_data, formatting_text, formatting_text_validation
 from train_setup import hyperparameter_setting, load_model_custom
 
 
 def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_vae, logger):
+    columns_train = ['epoch', 'step', 'iteration_time', 'elbo', 'elbo_filtered', 'skipped_updates']
+    df_train = pd.DataFrame(columns=columns_train)
+    df_train.to_csv(H.save_dir + '/saving_train_stats.csv')
+    columns_val = ['epoch', 'step', 'iteration_time', 'elbo', 'elbo_filtered']
+    df_val = pd.DataFrame(columns=columns_val)
+    df_val.to_csv(H.save_dir + '/saving_validation_stats.csv')
     visualization_number = 8
     images_visualization_original, images_visualization_processed = get_displaying_data(validation_dataset, preprocess_fn, visualization_number, logger)
     stats = []
@@ -45,9 +51,11 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
         )
 
         for x in traindata_loader:
+            x = [x]
             ## Starting single step
             # =======================================================================
             input_data, target_data = preprocess_fn(x)
+            #print(input_data.shape, target_data.shape)
             step_start = time.time()
             vae.zero_grad() # initialize gradient for back prop
 
@@ -82,6 +90,8 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
                 accumulated = stats_batch_processing(stats, H.iters_per_print)
                 format_text = formatting_text(accumulated)
                 logger.info("type: train_loss, lr: " + str(scheduler.get_last_lr()[0]) + ", epoch: " +str(epoch)+", step: " + str(iterate) + format_text)
+                # ['epoch', 'setp', 'iteration_time', 'elbo', 'elbo_filtered', 'skipped_updates']
+                df_train = add_row_train(df_train, epoch, iterate, accumulated['iter_time'], accumulated['elbo'], accumulated['elbo_filtered'], accumulated['skipped_updates'])
             
             iterate += 1
             iters_since_starting += 1
@@ -104,7 +114,13 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
             valid_stats = validation_main(H, ema_vae, validation_dataset, preprocess_fn, logger)
             valid_stats_text = formatting_text_validation(valid_stats)
             logger.info("type: eval_loss, epoch: " + str(epoch) + ", step: " + str(iterate) + str(valid_stats_text))
+
+            ## saving information
+            # =======================================================================
             saving_model(epoch, os.path.join(H.save_dir, f'iter-{iterate}'), vae, ema_vae, optimizer, H)
+            df_train.to_csv(H.save_dir + '/saving_train_stats.csv')
+            df_val = add_row_val(df_train, epoch, iterate, valid_stats['elbo'], valid_stats['filtered_elbo'])
+            df_val.to_csv(H.save_dir + '/saving_validation_stats.csv')
 
 
 def validation_main(H, ema_vae, data_valid, preprocess_fn, logger):
@@ -120,6 +136,7 @@ def validation_main(H, ema_vae, data_valid, preprocess_fn, logger):
                              shuffle=True) 
 
     for x in validation_data_loader:
+        x = [x]
         ## Starting validation step
         # =======================================================================
         input_image, target_image = preprocess_fn(x)
@@ -154,12 +171,12 @@ def test_main(H, ema_vae, data_test, preprocess_fn, logger):
 def main():
     logger = create_logger("Training Logger", log_file='training_log.txt')
     Parameters = hyperparameter_setting(logger)
-    Parameters, data_train, data_valid_or_test, preprocess_fn = set_up_data(Parameters)
+    Parameters, data_train, data_validation_test, preprocess_fn = prepare_data(Parameters)
     vae, ema_vae = load_model_custom(Parameters, logger)
     if Parameters.test_eval:
-        test_main(Parameters, ema_vae, data_valid_or_test, preprocess_fn, logger)
+        test_main(Parameters, ema_vae, data_validation_test, preprocess_fn, logger)
     else:
-        train_main(Parameters, data_train, data_valid_or_test, preprocess_fn, vae, ema_vae, logger)
+        train_main(Parameters, data_train, data_validation_test, preprocess_fn, vae, ema_vae, logger)
 
 
 if __name__ == "__main__":

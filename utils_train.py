@@ -1,11 +1,9 @@
 import torch
-import json
 import numpy as np
 import os
 import logging
-import subprocess
 import shutil
-
+import pandas as pd
 
 
 def check_nans(forward_result):
@@ -36,7 +34,8 @@ def warmup_function(warmup_iters):
     return lambda iteration: max(1.0, iteration / warmup_iters) if iteration <= warmup_iters else 1.0
 
 def load_optimizer(H, vae, logger):
-    # use AdamW optimizer
+    ## This code is for saving the model after iteration
+    # =======================================================================
     optimizer = torch.optim.AdamW(
         params=vae.parameters(),
         weight_decay=H.wd,
@@ -44,10 +43,12 @@ def load_optimizer(H, vae, logger):
         betas=(H.adam_beta1, H.adam_beta2)
     )
     # use schedular with linear warmup
+    # =======================================================================
     scheduler = torch.optim.lr_scheduler.LambdaLR(
         optimizer, lr_lambda=warmup_function(H.warmup_iters)
     )
     # this is for restarting training
+    # =======================================================================
     if H.restore_optimizer_path:
         optimizer_state = torch.load(H.restore_optimizer_path, map_location='cpu')
         optimizer.load_state_dict(optimizer_state)
@@ -58,24 +59,54 @@ def load_optimizer(H, vae, logger):
     logger.info(f"Starting at epoch {starting_epoch}, iterate {iterate}, eval loss {cur_eval_loss}")
     return optimizer, scheduler, cur_eval_loss, iterate, starting_epoch
 
-##====== change ======
 
 def update_ema(vae, ema_vae, ema_rate):
-    for p1, p2 in zip(vae.parameters(), ema_vae.parameters()):
-        p2.data.mul_(ema_rate)
-        p2.data.add_(p1.data * (1 - ema_rate))
+    vae_params = list(vae.parameters())
+    ema_vae_params = list(ema_vae.parameters())
+    for i in range(len(vae_params)):
+        ema_value = ema_vae_params[i].data * ema_rate + vae_params[i].data * (1 - ema_rate)
+        ema_vae_params[i].data = ema_value
 
 
 def saving_model(epoch, path, vae, ema_vae, optimizer, H):
-    log_from = os.path.join(H.save_dir, 'log.jsonl')
-    log_to = f'{os.path.dirname(path)}/{os.path.basename(path)}-log.jsonl'
-    torch.save(vae.state_dict(), f'{path}-model'+str(epoch)+'.th')
-    torch.save(ema_vae.state_dict(), f'{path}-model-ema'+str(epoch)+'.th')
-    torch.save(optimizer.state_dict(), f'{path}-opt'+str(epoch)+'.th')
-    shutil.copy(log_from, log_to)
+    ## This code is for saving the model after iteration
+    # =======================================================================
+    torch.save(vae.state_dict(), f'{path}_model'+str(epoch)+'.th')
+    torch.save(ema_vae.state_dict(), f'{path}_model_ema'+str(epoch)+'.th')
+    torch.save(optimizer.state_dict(), f'{path}_optimizer'+str(epoch)+'.th')
+
+
+def add_row_train(df, epoch, setp, iteration_time, elbo, elbo_filtered, skipped_updates):
+    # Create a new row as a dictionary
+    new_row = {
+        'epoch':epoch,
+        'step': setp,
+        'iteration_time': iteration_time,
+        'elbo': elbo,
+        'elbo_filtered': elbo_filtered,
+        'skipped_updates': skipped_updates
+    }
+    # Append the new row to the DataFrame
+    df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    return df
+
+def add_row_val(df, epoch, setp, elbo, elbo_filtered):
+    # Create a new row as a dictionary
+    new_row = {
+        'epoch':epoch,
+        'step': setp,
+        'elbo': elbo,
+        'elbo_filtered': elbo_filtered
+    }
+    # Append the new row to the DataFrame
+    df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    return df
 
 
 def stats_batch_processing(stats, frequency):
+    ## This code is for processign accumulated stats
+    # Calculate the average value of the stats obtained in each iteration over a specific portion.
+    # =======================================================================
     def safe_mean(values):
         return np.mean(values) if len(values) > 0 else 0.0
     def safe_max(values):
