@@ -1,16 +1,11 @@
+import os
 import torch
 import numpy as np
 import argparse
-import os
+
 from set_hyperparameter import Hyperparams, parse_args_and_update_hparams, add_vae_arguments
 from data import mkdir_from_path
 from vae import VAE
-
-
-def setup_save_dirs(H):
-    H.save_dir = os.path.join(H.save_dir, H.desc)
-    mkdir_from_path(H.save_dir)
-    H.logdir = os.path.join(H.save_dir, 'log')
 
 
 def hyperparameter_setting(logger):
@@ -40,6 +35,11 @@ def restore_params(model, path, map_cpu=False):
     # =======================================================================
     state_dict = torch.load(path, map_location='cpu' if map_cpu else None)
     model.load_state_dict(state_dict)
+
+def setup_save_dirs(H):
+    H.save_dir = os.path.join(H.save_dir, H.desc)
+    mkdir_from_path(H.save_dir)
+    H.logdir = os.path.join(H.save_dir, 'log')
 
 
 def load_model_custom(parameter, logger):

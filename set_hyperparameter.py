@@ -25,30 +25,18 @@ cifar10.ema_rate = 0.9999
 HPARAMS_REGISTRY['cifar10'] = cifar10
 
 
-i32 = Hyperparams()
-i32.update(cifar10)
-i32.dataset = 'imagenet32'
-i32.ema_rate = 0.999
-i32.dec_blocks = "1x2,4m1,4x4,8m4,8x9,16m8,16x19,32m16,32x40"
-i32.enc_blocks = "32x15,32d2,16x9,16d2,8x8,8d2,4x6,4d4,1x6"
-i32.width = 512
-i32.n_batch = 8
-i32.lr = 0.00015
-i32.grad_clip = 200.
-i32.skip_threshold = 300.
-i32.epochs_per_eval = 1
-i32.epochs_per_eval_save = 1
-HPARAMS_REGISTRY['imagenet32'] = i32
-
-i64 = Hyperparams()
-i64.update(i32)
-i64.n_batch = 4
-i64.grad_clip = 220.0
-i64.skip_threshold = 380.0
-i64.dataset = 'imagenet64'
-i64.dec_blocks = "1x2,4m1,4x3,8m4,8x7,16m8,16x15,32m16,32x31,64m32,64x12"
-i64.enc_blocks = "64x11,64d2,32x20,32d2,16x9,16d2,8x8,8d2,4x7,4d4,1x5"
-HPARAMS_REGISTRY['imagenet64'] = i64
+flower32 = Hyperparams()
+flower32.width = 384
+flower32.lr = 0.0002
+flower32.zdim = 16
+flower32.wd = 0.01
+flower32.dec_blocks = "1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21"
+flower32.enc_blocks = "32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3"
+flower32.warmup_iters = 100
+flower32.dataset = 'flower32'
+flower32.n_batch = 16
+flower32.ema_rate = 0.9999
+HPARAMS_REGISTRY['flower32'] = flower32
 
 
 def parse_args_and_update_hparams(H, parser, s=None):

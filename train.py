@@ -119,7 +119,7 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
             # =======================================================================
             saving_model(epoch, os.path.join(H.save_dir, f'iter-{iterate}'), vae, ema_vae, optimizer, H)
             df_train.to_csv(H.save_dir + '/saving_train_stats.csv')
-            df_val = add_row_val(df_train, epoch, iterate, valid_stats['elbo'], valid_stats['filtered_elbo'])
+            df_val = add_row_val(df_val, epoch, iterate, valid_stats['elbo'], valid_stats['filtered_elbo'])
             df_val.to_csv(H.save_dir + '/saving_validation_stats.csv')
 
 

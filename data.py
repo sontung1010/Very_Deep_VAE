@@ -2,10 +2,11 @@ import numpy as np
 import pickle
 import os
 import torch
-from torch.utils.data import Dataset, TensorDataset
+from torch.utils.data import Dataset
 from torchvision.datasets import ImageFolder
 import torchvision.transforms as transforms
 from sklearn.model_selection import train_test_split
+from PIL import Image
 
 class CustomDataset(Dataset):
     def __init__(self, data):
@@ -22,6 +23,7 @@ def prepare_data(config):
         'cifar10': {'shift': -120.63838, 'scale': 1. / 64.16736},
         'imagenet32': {'shift': -116.2373, 'scale': 1. / 69.37404},
         'imagenet64': {'shift': -115.92961967, 'scale': 1. / 69.37404},
+        'flower32' : {'shift': -100.11472258, 'scale': 1. / 66.41444},
     }
     loss_params = {'shift_loss': -127.5, 'scale_loss': 1. / 127.5}
 
@@ -30,11 +32,11 @@ def prepare_data(config):
     if config.dataset == 'imagenet32':
         train_data, val_data, test_data = load_imagenet32(config.data_root)
         config.image_size, config.image_channels = 32, 3
-    elif config.dataset == 'imagenet64':
-        train_data, val_data, test_data = load_imagenet64(config.data_root)
-        config.image_size, config.image_channels = 64, 3
     elif config.dataset == 'cifar10':
         train_data, val_data, test_data = load_cifar10(config.data_root)
+        config.image_size, config.image_channels = 32, 3
+    elif config.dataset == 'flower32':
+        train_data, val_data, test_data = load_flower32(config.data_root)
         config.image_size, config.image_channels = 32, 3
     else:
         raise ValueError(f"Dataset '{config.dataset}' is not recognized!")
@@ -65,11 +67,9 @@ def prepare_data(config):
 
     return config, train_dataset, eval_dataset, preprocess
 
-
 def map_to_tensor(params):
     return_value = {value: torch.tensor([value]).cuda().view(1, 1, 1, 1) for key, value in params.items()}
     return return_value
-
 
 def load_imagenet32(root):
     train_data = np.load(os.path.join(root, 'imagenet32-train.npy'), mmap_mode='r')
@@ -79,11 +79,23 @@ def load_imagenet32(root):
 def mkdir_from_path(path):
     os.makedirs(path, exist_ok=True)
 
-def load_imagenet64(root):
-    train_data = np.load(os.path.join(root, 'imagenet64-train.npy'), mmap_mode='r')
-    indices = np.random.permutation(train_data.shape[0])
-    return train_data[indices[:-5000]], train_data[indices[-5000:]], np.load(os.path.join(root, 'imagenet64-valid.npy'))
+def load_flower32(root, test_size=0.1, val_size=0.1, random_state=42):
+    ## This is the custom dataset we used (not tested in original paper)
+    # ========================================================================
+    images = []
 
+    for file_name in os.listdir(root + '102flowers/processed_png'):
+        if file_name.endswith('.png'):
+            # Load the image
+            image_path = os.path.join(root + '102flowers/processed_png', file_name)
+            image = Image.open(image_path).convert("RGB") 
+            image_array = np.array(image, dtype=np.uint8)
+            images.append(image_array)
+
+    images = np.array(images)
+    train_data, test_data = train_test_split(images, test_size=test_size, random_state=random_state)
+    train_data, val_data = train_test_split(train_data, test_size=val_size, random_state=random_state)
+    return train_data, val_data, test_data
 
 def load_cifar10(root):
     def unpickle(file):
@@ -98,3 +110,4 @@ def load_cifar10(root):
     test_data = test_data.reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
     train_data, val_data = train_test_split(train_data, test_size=5000, random_state=42)
     return train_data, val_data, test_data
+

@@ -8,6 +8,7 @@ cifar-10-batches-py/
 saved_models/
 saved_models/test
 saved_models/dec07_cifar
+102flowers
 
 # Ignore virtual environments
 env/
