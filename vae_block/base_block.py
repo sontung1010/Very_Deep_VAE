@@ -27,8 +27,10 @@ class Block(nn.Module):
         intermediate_output = self.conv4(F.gelu(intermediate_output))
         
         # Add residual connection if specified
-        if self.use_residual:final_output = inputs + intermediate_output
-        else : final_output = intermediate_output
+        if self.use_residual:
+            final_output = inputs + intermediate_output
+        else :
+            final_output = intermediate_output
 
         # Optionally apply down-sampling using average pooling
         if self.down_sample_rate is not None:

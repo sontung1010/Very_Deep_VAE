@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 # importing from another files
 from data import prepare_data
 from utils_train import check_nans, create_logger, load_optimizer, stats_batch_processing, saving_model, update_ema, add_row_train, add_row_val
-from visualization import create_images, get_displaying_data, formatting_text, formatting_text_validation
+from visualization import create_images, create_images_test, get_displaying_data, formatting_text, formatting_text_validation
 from train_setup import hyperparameter_setting, load_model_custom
 
 
@@ -159,6 +159,9 @@ def validation_main(H, ema_vae, data_valid, preprocess_fn, logger):
 def test_main(H, ema_vae, data_test, preprocess_fn, logger):
     print('\n\n')
     logger.info("Starting testing phase.")
+    images_visualization_original, images_visualization_processed = get_displaying_data(data_test, preprocess_fn, 4, logger)
+    file_name =  f'{H.save_dir}/displaying_images_test.png'
+    create_images_test(H, ema_vae, images_visualization_original, images_visualization_processed, file_name, logger)
     stats = validation_main(H, ema_vae, data_test, preprocess_fn, logger)
     logger.info("Test results:")
     logger.info('=' * 50)

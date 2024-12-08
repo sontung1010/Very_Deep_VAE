@@ -29,10 +29,7 @@ def prepare_data(config):
 
     if config.dataset not in normalization_params:
         raise ValueError(f"Dataset '{config.dataset}' is not recognized!")
-    if config.dataset == 'imagenet32':
-        train_data, val_data, test_data = load_imagenet32(config.data_root)
-        config.image_size, config.image_channels = 32, 3
-    elif config.dataset == 'cifar10':
+    if config.dataset == 'cifar10':
         train_data, val_data, test_data = load_cifar10(config.data_root)
         config.image_size, config.image_channels = 32, 3
     elif config.dataset == 'flower32':

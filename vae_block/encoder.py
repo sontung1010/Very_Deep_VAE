@@ -55,8 +55,6 @@ class Encoder(HModule):
     def forward(self, x):
         # Permute input tensor from (batch, height, width, channels) to (batch, channels, height, width)
         x = x.permute(0, 3, 1, 2).contiguous()
-        
-        # Pass through the initial convolution layer
         x = self.in_conv(x)
         
         # Dictionary to store intermediate activations at each resolution

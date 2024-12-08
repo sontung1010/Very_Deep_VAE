@@ -12,12 +12,12 @@ class VAE(HModule):
         self.encoder = Encoder(self.H)
         self.decoder = Decoder(self.H)
 
+
     def forward(self, x, x_target):
         """
         Input:
         - x: Input data.
         - x_target: Target data (usually the same as `x`, but could differ for augmented data).
-        
         Return:
         A dictionary containing:
         - elbo: Evidence Lower Bound, the objective being optimized.
@@ -50,6 +50,7 @@ class VAE(HModule):
             rate=rate_per_pixel.mean()  # KL divergence regularization term
         )
 
+
     def forward_get_latents(self, x):
         """
         Input:
@@ -62,6 +63,7 @@ class VAE(HModule):
         activations = self.encoder.forward(x)
         val1, stats = self.decoder.forward(activations, get_latents=True)
         return stats
+
 
     def forward_uncond_samples(self, n_batch, t=None):
         """
@@ -76,6 +78,7 @@ class VAE(HModule):
         px_z = self.decoder.forward_uncond(n_batch, t=t)
         # Use the output network to sample from the predicted distribution
         return self.decoder.out_net.sample(px_z)
+
 
     def forward_samples_set_latents(self, n_batch, latents, t=None):
         """
