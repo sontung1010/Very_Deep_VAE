@@ -22,6 +22,19 @@ flower32.n_batch = 16
 flower32.ema_rate = 0.9999
 HPARAMS_REGISTRY['flower32'] = flower32
 
+imagenet32 = Hyperparams()
+imagenet32.width = 512
+imagenet32.lr = 0.00015
+imagenet32.zdim = 16
+imagenet32.wd = 0.01
+imagenet32.dec_blocks = "1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21"
+imagenet32.enc_blocks = "32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3"
+imagenet32.warmup_iters = 100
+imagenet32.dataset = 'imagenet32'
+imagenet32.n_batch = 16
+imagenet32.ema_rate = 0.9999
+HPARAMS_REGISTRY['imagenet32'] = imagenet32
+
 cifar10 = Hyperparams()
 cifar10.width = 384
 cifar10.lr = 0.0002

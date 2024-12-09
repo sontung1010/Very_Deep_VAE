@@ -10,7 +10,7 @@ def crop_and_resize_images(input_folder, output_folder, output_size=(32, 32)):
     # ==========================================================================
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
-    images = [f for f in os.listdir(input_folder) if f.endswith('.jpg')]
+    images = [f for f in os.listdir(input_folder) if f.endswith('.JPEG')] #.jpg)]
 
     for image_name in images:
         image_path = os.path.join(input_folder, image_name)
@@ -37,8 +37,8 @@ def crop_and_resize_images(input_folder, output_folder, output_size=(32, 32)):
         cv2.imwrite(output_path, resized)
         print(f"Processed and saved: {output_path}")
 
-input_folder = '102flowers/jpg'
-output_folder = '102flowers/processed_png' 
+input_folder = 'imagenet_filtered/original'
+output_folder = 'imagenet_filtered/processed'
 crop_and_resize_images(input_folder, output_folder)
 
 def calculate_shift_and_scale_with_cv2(folder_path):

@@ -20,6 +20,7 @@ class CustomDataset(Dataset):
 def prepare_data(config):
     dataset_normalization_params = {
         'cifar10': {'shift': -120.63838, 'scale': 1. / 64.16736},
+        'imagenet32': {'shift': -110.95837, 'scale': 1. / 64.82333},
         # mean and sd of custom dataset was calculated using preprocessing_custom_dataset.py
         'flower32' : {'shift': -100.11472258, 'scale': 1. / 66.41444},
     }
@@ -78,6 +79,24 @@ def load_flower32(root, test_size=0.1, val_size=0.1, random_state=42):
         if file_name.endswith('.png'):
             # Load the image
             image_path = os.path.join(root + '102flowers/processed_png', file_name)
+            image = Image.open(image_path).convert("RGB") 
+            image_array = np.array(image, dtype=np.uint8)
+            images.append(image_array)
+
+    images = np.array(images)
+    train_data, test_data = train_test_split(images, test_size=test_size, random_state=random_state)
+    train_data, val_data = train_test_split(train_data, test_size=val_size, random_state=random_state)
+    return train_data, val_data, test_data
+
+def load_filtered_imagenet32(root, test_size=0.1, val_size=0.1, random_state=42):
+    ## This is the custom dataset we used (not tested in original paper)
+    # ========================================================================
+    images = []
+
+    for file_name in os.listdir(root + 'imagenet_filtered/processed_png'):
+        if file_name.endswith('.png'):
+            # Load the image
+            image_path = os.path.join(root + 'imagenet_filtered/processed_png', file_name)
             image = Image.open(image_path).convert("RGB") 
             image_array = np.array(image, dtype=np.uint8)
             images.append(image_array)
