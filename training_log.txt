@@ -2676,3 +2676,824 @@
 2024-12-08 17:51:58,330 - INFO - distortion: 9.110081672668457
 2024-12-08 17:51:58,330 - INFO - rate: 2.5870907306671143
 2024-12-08 17:51:58,330 - INFO - type: test_loss,  n_batches: 625 elbo: 11.697173 elbo_filtered: 11.697173 rate: 2.5870907 distortion: 9.110082 
+2024-12-08 20:43:58,875 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 20:43:58,875 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 20:43:58,875 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 20:43:58,875 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 20:43:58,876 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= port value= 29500
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 20:43:58,877 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= seed value= 0
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= width value= 384
+2024-12-08 20:43:58,878 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 20:43:58,884 - INFO - training model final_code dataset: flower32
+2024-12-08 20:44:01,903 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 20:44:01,935 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 20:44:01,935 - INFO - Starting epoch0
+2024-12-08 20:44:03,894 - INFO - Printing samples to ./saved_models\final_code/displaying_images_0.png
+2024-12-08 20:44:06,054 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 0 iteration_time: 2.1543447971343994 elbo: 6.349915981292725 elbo_filtered: 6.349915981292725 rate_nans: 0 skipped_updates: 0 
+2024-12-08 20:44:41,732 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 100 iteration_time: 0.35628785610198976 elbo: 5.260932445526123 elbo_filtered: 5.260932445526123 rate_nans: 0 skipped_updates: 0 
+2024-12-08 20:45:16,823 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 200 iteration_time: 0.3505814385414123 elbo: 4.694990634918213 elbo_filtered: 4.694990634918213 rate_nans: 0 skipped_updates: 0 
+2024-12-08 20:45:51,864 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 300 iteration_time: 0.3500638747215271 elbo: 4.420863151550293 elbo_filtered: 4.420863151550293 rate_nans: 0 skipped_updates: 0 
+2024-12-08 20:46:27,037 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 400 iteration_time: 0.351491961479187 elbo: 4.287502288818359 elbo_filtered: 4.287502288818359 rate_nans: 0 skipped_updates: 0 
+2024-12-08 20:46:31,613 - INFO - 1 Epoch Finished - duration:149.6783790588379
+2024-12-08 20:46:31,614 - INFO - Intiating validation.
+2024-12-08 20:46:35,758 - INFO - type: eval_loss, epoch: 0, step: 414 n_batches: 46 elbo: 6.2750564 elbo_filtered: 6.2750564 rate: 0.0035330262 distortion: 6.2715235 
+2024-12-08 20:46:36,583 - INFO - Starting epoch1
+2024-12-08 20:46:36,885 - INFO - Printing samples to ./saved_models\final_code/displaying_images_1.png
+2024-12-08 20:47:07,794 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 500 iteration_time: 0.3544194722175598 elbo: 4.227173328399658 elbo_filtered: 4.227173328399658 rate_nans: 0 skipped_updates: 0 
+2024-12-08 20:47:42,723 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 600 iteration_time: 0.3488283157348633 elbo: 4.174935817718506 elbo_filtered: 4.174935817718506 rate_nans: 0 skipped_updates: 0 
+2024-12-08 20:48:18,170 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 700 iteration_time: 0.3541524791717529 elbo: 4.142784118652344 elbo_filtered: 4.142784118652344 rate_nans: 0 skipped_updates: 0 
+2024-12-08 20:48:53,033 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 800 iteration_time: 0.34823348045349123 elbo: 4.106034755706787 elbo_filtered: 4.106034755706787 rate_nans: 0 skipped_updates: 0 
+2024-12-08 20:49:02,393 - INFO - 1 Epoch Finished - duration:145.81005001068115
+2024-12-08 20:49:02,394 - INFO - Intiating validation.
+2024-12-08 20:49:06,364 - INFO - type: eval_loss, epoch: 1, step: 828 n_batches: 46 elbo: 6.240491 elbo_filtered: 6.240491 rate: 0.0032077313 distortion: 6.237283 
+2024-12-08 20:49:07,149 - INFO - Starting epoch2
+2024-12-08 20:49:07,447 - INFO - Printing samples to ./saved_models\final_code/displaying_images_2.png
+2024-12-08 20:49:33,760 - INFO - type: train_loss, lr: 0.0002, epoch: 2, step: 900 iteration_time: 0.35630528450012205 elbo: 4.082296371459961 elbo_filtered: 4.082296371459961 rate_nans: 0 skipped_updates: 0 
+2024-12-08 20:57:37,773 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 20:57:37,773 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 20:57:37,773 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 20:57:37,773 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 20:57:37,774 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 20:57:37,775 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 20:57:37,776 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 20:57:37,776 - INFO - type:hparam, key= port value= 29500
+2024-12-08 20:57:37,776 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 20:57:37,776 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 20:57:37,776 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 20:57:37,776 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 20:57:37,776 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 20:57:37,776 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 20:57:37,776 - INFO - type:hparam, key= seed value= 0
+2024-12-08 20:57:37,777 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 20:57:37,777 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 20:57:37,777 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 20:57:37,777 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 20:57:37,777 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 20:57:37,777 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 20:57:37,777 - INFO - type:hparam, key= width value= 384
+2024-12-08 20:57:37,777 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 20:57:37,780 - INFO - training model final_code dataset: flower32
+2024-12-08 20:57:40,132 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 20:57:40,164 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 20:57:40,164 - INFO - Starting epoch0
+2024-12-08 21:00:06,276 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:00:06,276 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:00:06,276 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:00:06,276 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:00:06,277 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:00:06,278 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:00:06,279 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:00:06,280 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:00:06,280 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:00:06,280 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:00:06,280 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:00:06,280 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:00:06,280 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:00:06,280 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:00:06,283 - INFO - training model final_code dataset: flower32
+2024-12-08 21:00:08,649 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:00:08,682 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:00:08,682 - INFO - Starting epoch0
+2024-12-08 21:00:41,797 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:00:41,797 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:00:41,797 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:00:41,797 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:00:41,797 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:00:41,797 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:00:41,797 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:00:41,798 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:00:41,799 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:00:41,800 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:00:41,803 - INFO - training model final_code dataset: flower32
+2024-12-08 21:00:44,113 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:00:44,144 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:00:44,145 - INFO - Starting epoch0
+2024-12-08 21:01:44,321 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:01:44,321 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:01:44,321 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:01:44,321 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:01:44,322 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:01:44,324 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:01:44,325 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:01:44,325 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:01:44,325 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:01:44,325 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:01:44,325 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:01:44,325 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:01:44,325 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:01:44,325 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:01:44,325 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:01:44,325 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:01:44,326 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:01:44,326 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:01:44,326 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:01:44,326 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:01:44,328 - INFO - training model final_code dataset: flower32
+2024-12-08 21:01:46,655 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:01:46,689 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:01:46,690 - INFO - Starting epoch0
+2024-12-08 21:01:48,700 - INFO - Printing samples to ./saved_models\final_code/displaying_images_0.png
+2024-12-08 21:01:50,909 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 0 iteration_time: 2.2052927017211914 elbo: 6.349915981292725 elbo_filtered: 6.349915981292725 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:02:26,624 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 100 iteration_time: 0.35671491146087647 elbo: 5.260932445526123 elbo_filtered: 5.260932445526123 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:03:02,241 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 200 iteration_time: 0.3557341265678406 elbo: 4.694953441619873 elbo_filtered: 4.694953441619873 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:12:38,624 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:12:38,626 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:12:38,627 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:12:38,629 - INFO - training model final_code dataset: flower32
+2024-12-08 21:12:40,995 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:12:41,027 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:12:41,027 - INFO - Starting epoch0
+2024-12-08 21:12:42,999 - INFO - Printing samples to ./saved_models\final_code/displaying_images_0.png
+2024-12-08 21:12:45,209 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 0 iteration_time: 2.2037923336029053 elbo: 6.349915981292725 elbo_filtered: 6.349915981292725 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:13:21,095 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 100 iteration_time: 0.35847182989120485 elbo: 5.2609357833862305 elbo_filtered: 5.2609357833862305 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:13:56,886 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 200 iteration_time: 0.3575407433509827 elbo: 4.695054054260254 elbo_filtered: 4.695054054260254 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:17:47,757 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:17:47,757 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:17:47,758 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:17:47,759 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:17:47,759 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:17:47,759 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:17:47,759 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:17:47,759 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:17:47,759 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:17:47,760 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:17:47,760 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:17:47,760 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:17:47,760 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:17:47,760 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:17:47,760 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:17:47,760 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:17:47,760 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:17:47,760 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:17:47,761 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:17:47,762 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:17:47,762 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:17:47,762 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:17:47,764 - INFO - training model final_code dataset: flower32
+2024-12-08 21:17:50,103 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:17:50,135 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:17:50,135 - INFO - Starting epoch0
+2024-12-08 21:17:52,098 - INFO - Printing samples to ./saved_models\final_code/displaying_images_0.png
+2024-12-08 21:17:54,362 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 0 iteration_time: 2.258800506591797 elbo: 6.349915981292725 elbo_filtered: 6.349915981292725 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:18:30,209 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 100 iteration_time: 0.3581335997581482 elbo: 5.260930061340332 elbo_filtered: 5.260930061340332 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:19:05,756 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 200 iteration_time: 0.35507667541503907 elbo: 4.694850444793701 elbo_filtered: 4.694850444793701 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:19:41,387 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 300 iteration_time: 0.3558377861976624 elbo: 4.421721935272217 elbo_filtered: 4.421721935272217 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:20:16,303 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 400 iteration_time: 0.3487223529815674 elbo: 4.292797088623047 elbo_filtered: 4.292797088623047 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:20:20,906 - INFO - 1 Epoch Finished - duration:150.771160364151
+2024-12-08 21:20:20,907 - INFO - Intiating validation.
+2024-12-08 21:20:25,264 - INFO - type: eval_loss, epoch: 0, step: 414 n_batches: 46 elbo: 6.275058 elbo_filtered: 6.275058 rate: 0.0035331321 distortion: 6.271525 
+2024-12-08 21:20:26,045 - INFO - Starting epoch1
+2024-12-08 21:20:26,365 - INFO - Printing samples to ./saved_models\final_code/displaying_images_1.png
+2024-12-08 21:20:57,199 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 500 iteration_time: 0.35387584924697874 elbo: 4.230302333831787 elbo_filtered: 4.230302333831787 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:21:33,162 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 600 iteration_time: 0.35912168741226197 elbo: 4.176120281219482 elbo_filtered: 4.176120281219482 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:22:09,474 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 700 iteration_time: 0.36279495239257814 elbo: 4.144372940063477 elbo_filtered: 4.144372940063477 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:22:45,312 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 800 iteration_time: 0.35792036771774294 elbo: 4.112298965454102 elbo_filtered: 4.112298965454102 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:22:54,886 - INFO - 1 Epoch Finished - duration:148.8402705192566
+2024-12-08 21:22:54,886 - INFO - Intiating validation.
+2024-12-08 21:22:58,893 - INFO - type: eval_loss, epoch: 1, step: 828 n_batches: 46 elbo: 6.240463 elbo_filtered: 6.240463 rate: 0.0032046454 distortion: 6.237257 
+2024-12-08 21:22:59,671 - INFO - Starting epoch2
+2024-12-08 21:23:00,001 - INFO - Printing samples to ./saved_models\final_code/displaying_images_2.png
+2024-12-08 21:29:41,612 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:29:41,612 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:29:41,612 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:29:41,612 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:29:41,612 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:29:41,613 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:29:41,614 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:29:41,615 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:29:41,616 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:29:41,616 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:29:41,616 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:29:41,618 - INFO - training model final_code dataset: flower32
+2024-12-08 21:29:44,000 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:29:44,036 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:29:44,037 - INFO - Starting epoch0
+2024-12-08 21:30:42,418 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:30:42,418 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:30:42,418 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:30:42,418 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:30:42,418 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:30:42,419 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:30:42,419 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:30:42,419 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:30:42,419 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:30:42,419 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:30:42,419 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:30:42,419 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:30:42,419 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:30:42,419 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:30:42,419 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:30:42,420 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:30:42,421 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:30:42,422 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:30:42,422 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:30:42,422 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:30:42,422 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:30:42,422 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:30:42,424 - INFO - training model final_code dataset: flower32
+2024-12-08 21:30:44,869 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:30:44,901 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:30:44,901 - INFO - Starting epoch0
+2024-12-08 21:33:10,482 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:33:10,482 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:33:10,482 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:33:10,483 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:33:10,484 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:33:10,485 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:33:10,488 - INFO - training model final_code dataset: flower32
+2024-12-08 21:33:12,872 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:33:12,905 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:33:12,905 - INFO - Starting epoch0
+2024-12-08 21:33:14,864 - INFO - Printing samples to ./saved_models\final_code/displaying_images_0.png
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:33:39,733 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:33:39,735 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:33:39,736 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:33:39,736 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:33:39,736 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:33:39,736 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:33:39,736 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:33:39,736 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:33:39,736 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:33:39,736 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:33:39,736 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:33:39,736 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:33:39,737 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:33:39,739 - INFO - training model final_code dataset: flower32
+2024-12-08 21:33:42,169 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:33:42,200 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:33:42,200 - INFO - Starting epoch0
+2024-12-08 21:33:44,175 - INFO - Printing samples to ./saved_models\final_code/displaying_images_0.png
+2024-12-08 21:33:46,393 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 0 iteration_time: 2.2132840156555176 elbo: 6.349915981292725 elbo_filtered: 6.349915981292725 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:34:21,948 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 100 iteration_time: 0.3551649188995361 elbo: 5.260930061340332 elbo_filtered: 5.260930061340332 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:34:57,325 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 200 iteration_time: 0.3533321213722229 elbo: 4.695031642913818 elbo_filtered: 4.695031642913818 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:35:09,536 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:35:09,537 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:35:09,537 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:35:09,537 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:35:09,537 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:35:09,537 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:35:09,537 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:35:09,537 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:35:09,537 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:35:09,537 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:35:09,538 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:35:09,539 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:35:09,540 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:35:09,542 - INFO - training model final_code dataset: flower32
+2024-12-08 21:35:11,878 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:35:11,910 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:35:11,911 - INFO - Starting epoch0
+2024-12-08 21:35:13,887 - INFO - Printing samples to ./saved_models\final_code/displaying_images_0.png
+2024-12-08 21:35:16,054 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 0 iteration_time: 2.1611168384552 elbo: 6.349915981292725 elbo_filtered: 6.349915981292725 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:35:52,017 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 100 iteration_time: 0.359160270690918 elbo: 5.260936260223389 elbo_filtered: 5.260936260223389 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:36:27,693 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 200 iteration_time: 0.35629782915115354 elbo: 4.694875717163086 elbo_filtered: 4.694875717163086 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:37:03,282 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 300 iteration_time: 0.3555665636062622 elbo: 4.420763969421387 elbo_filtered: 4.420763969421387 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:37:38,829 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 400 iteration_time: 0.35503769159317017 elbo: 4.295536518096924 elbo_filtered: 4.295536518096924 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:37:43,387 - INFO - 1 Epoch Finished - duration:151.47599244117737
+2024-12-08 21:37:43,387 - INFO - Intiating validation.
+2024-12-08 21:37:47,666 - INFO - type: eval_loss, epoch: 0, step: 414 n_batches: 46 elbo: 6.2750587 elbo_filtered: 6.2750587 rate: 0.0035331927 distortion: 6.2715263 
+2024-12-08 21:37:48,395 - INFO - Starting epoch1
+2024-12-08 21:37:48,753 - INFO - Printing samples to ./saved_models\final_code/displaying_images_1.png
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 21:58:43,869 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 21:58:43,870 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= port value= 29500
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= seed value= 0
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 21:58:43,871 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 21:58:43,872 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 21:58:43,872 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 21:58:43,872 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 21:58:43,872 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 21:58:43,872 - INFO - type:hparam, key= width value= 384
+2024-12-08 21:58:43,872 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 21:58:43,874 - INFO - training model final_code dataset: flower32
+2024-12-08 21:58:46,329 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 21:58:46,967 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 21:58:46,968 - INFO - Starting epoch0
+2024-12-08 21:58:48,944 - INFO - Printing samples to ./saved_models\final_code/displaying_images_0.png
+2024-12-08 21:58:51,123 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 0 iteration_time: 2.1758222579956055 elbo: 6.349915981292725 elbo_filtered: 6.349915981292725 rate_nans: 0 skipped_updates: 0 
+2024-12-08 21:59:26,315 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 100 iteration_time: 0.35146900177001955 elbo: 5.260932445526123 elbo_filtered: 5.260932445526123 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:00:00,168 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 200 iteration_time: 0.338168568611145 elbo: 4.694867134094238 elbo_filtered: 4.694867134094238 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:28:46,514 - INFO - type:hparam, key= adam_beta1 value= 0.9
+2024-12-08 22:28:46,514 - INFO - type:hparam, key= adam_beta2 value= 0.9
+2024-12-08 22:28:46,514 - INFO - type:hparam, key= bottleneck_multiple value= 0.25
+2024-12-08 22:28:46,514 - INFO - type:hparam, key= custom_width_str value= 
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= data_root value= ./
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= dataset value= flower32
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= dec_blocks value= 1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= desc value= final_code
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= ema_rate value= 0.9999
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= enc_blocks value= 32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= epochs_per_eval value= 1
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= epochs_per_eval_save value= 20
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= epochs_per_probe value= None
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= grad_clip value= 200.0
+2024-12-08 22:28:46,515 - INFO - type:hparam, key= hparam_sets value= flower32
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= iters_per_ckpt value= 2500
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= iters_per_images value= 1000
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= iters_per_print value= 100
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= iters_per_save value= 1000
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= logdir value= ./saved_models\final_code\log
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= lr value= 0.0002
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= lr_prior value= 0.00015
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= n_batch value= 16
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= no_bias_above value= 64
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= num_epochs value= 1000
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= num_images_visualize value= 8
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= num_mixtures value= 10
+2024-12-08 22:28:46,516 - INFO - type:hparam, key= num_temperatures_visualize value= 3
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= num_variables_visualize value= 6
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= port value= 29500
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= restore_ema_path value= None
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= restore_log_path value= None
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= restore_optimizer_path value= None
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= restore_path value= None
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= save_dir value= ./saved_models\final_code
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= scale_encblock value= False
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= seed value= 0
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= skip_threshold value= 400.0
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= temperature value= 1.0
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= test_eval value= False
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= warmup_iters value= 100
+2024-12-08 22:28:46,517 - INFO - type:hparam, key= wd value= 0.01
+2024-12-08 22:28:46,518 - INFO - type:hparam, key= wd_prior value= 0.0
+2024-12-08 22:28:46,518 - INFO - type:hparam, key= width value= 384
+2024-12-08 22:28:46,518 - INFO - type:hparam, key= zdim value= 16
+2024-12-08 22:28:46,519 - INFO - training model final_code dataset: flower32
+2024-12-08 22:28:48,958 - INFO - total_parameter num= 39145700, readable= 39,145,700
+2024-12-08 22:28:49,580 - INFO - Starting at epoch 0, iterate 0, eval loss inf
+2024-12-08 22:28:49,581 - INFO - Starting epoch0
+2024-12-08 22:28:51,534 - INFO - Printing samples to ./saved_models\final_code/displaying_images_0.png
+2024-12-08 22:28:53,719 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 0 iteration_time: 2.1806273460388184 elbo: 6.349915981292725 elbo_filtered: 6.349915981292725 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:29:28,973 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 100 iteration_time: 0.35205300807952883 elbo: 5.2609333992004395 elbo_filtered: 5.2609333992004395 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:30:04,356 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 200 iteration_time: 0.35353578329086305 elbo: 4.69478702545166 elbo_filtered: 4.69478702545166 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:30:39,699 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 300 iteration_time: 0.3530445170402527 elbo: 4.420912265777588 elbo_filtered: 4.420912265777588 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:31:13,841 - INFO - type: train_loss, lr: 0.0002, epoch: 0, step: 400 iteration_time: 0.34097465991973874 elbo: 4.293264865875244 elbo_filtered: 4.293264865875244 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:31:18,489 - INFO - 1 Epoch Finished - duration:148.90765118598938
+2024-12-08 22:31:18,489 - INFO - Intiating validation.
+2024-12-08 22:31:22,680 - INFO - type: eval_loss, epoch: 0, step: 414 n_batches: 46 elbo: 6.2750616 elbo_filtered: 6.2750616 rate: 0.003533443 distortion: 6.2715282 
+2024-12-08 22:31:23,469 - INFO - Starting epoch1
+2024-12-08 22:31:23,795 - INFO - Printing samples to ./saved_models\final_code/displaying_images_1.png
+2024-12-08 22:31:54,796 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 500 iteration_time: 0.3559905457496643 elbo: 4.228236198425293 elbo_filtered: 4.228236198425293 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:32:30,062 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 600 iteration_time: 0.352199878692627 elbo: 4.179022312164307 elbo_filtered: 4.179022312164307 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:33:05,859 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 700 iteration_time: 0.35757715702056886 elbo: 4.145705699920654 elbo_filtered: 4.145705699920654 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:33:41,484 - INFO - type: train_loss, lr: 0.0002, epoch: 1, step: 800 iteration_time: 0.3557993292808533 elbo: 4.109210968017578 elbo_filtered: 4.109210968017578 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:33:50,769 - INFO - 1 Epoch Finished - duration:147.30032014846802
+2024-12-08 22:33:50,770 - INFO - Intiating validation.
+2024-12-08 22:33:54,831 - INFO - type: eval_loss, epoch: 1, step: 828 n_batches: 46 elbo: 6.24054 elbo_filtered: 6.24054 rate: 0.0032066223 distortion: 6.2373333 
+2024-12-08 22:33:55,544 - INFO - Starting epoch2
+2024-12-08 22:33:55,848 - INFO - Printing samples to ./saved_models\final_code/displaying_images_2.png
+2024-12-08 22:34:21,357 - INFO - type: train_loss, lr: 0.0002, epoch: 2, step: 900 iteration_time: 0.3474269771575928 elbo: 4.071975231170654 elbo_filtered: 4.071975231170654 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:34:57,079 - INFO - type: train_loss, lr: 0.0002, epoch: 2, step: 1000 iteration_time: 0.3568380236625671 elbo: 4.032565593719482 elbo_filtered: 4.032565593719482 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:35:31,690 - INFO - type: train_loss, lr: 0.0002, epoch: 2, step: 1100 iteration_time: 0.3457028365135193 elbo: 4.025420665740967 elbo_filtered: 4.025420665740967 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:36:07,279 - INFO - type: train_loss, lr: 0.0002, epoch: 2, step: 1200 iteration_time: 0.3554160809516907 elbo: 3.9993598461151123 elbo_filtered: 3.9993598461151123 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:36:21,819 - INFO - 1 Epoch Finished - duration:146.27501440048218
+2024-12-08 22:36:21,819 - INFO - Intiating validation.
+2024-12-08 22:36:25,969 - INFO - type: eval_loss, epoch: 2, step: 1242 n_batches: 46 elbo: 6.1984878 elbo_filtered: 6.1984878 rate: 0.0033270342 distortion: 6.1951613 
+2024-12-08 22:36:26,706 - INFO - Starting epoch3
+2024-12-08 22:36:27,021 - INFO - Printing samples to ./saved_models\final_code/displaying_images_3.png
+2024-12-08 22:36:47,610 - INFO - type: train_loss, lr: 0.0002, epoch: 3, step: 1300 iteration_time: 0.35091438293457033 elbo: 3.9841911792755127 elbo_filtered: 3.9841911792755127 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:37:22,488 - INFO - type: train_loss, lr: 0.0002, epoch: 3, step: 1400 iteration_time: 0.34821107864379885 elbo: 3.9364702701568604 elbo_filtered: 3.9364702701568604 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:37:57,412 - INFO - type: train_loss, lr: 0.0002, epoch: 3, step: 1500 iteration_time: 0.34887602090835573 elbo: 3.936979293823242 elbo_filtered: 3.936979293823242 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:38:32,307 - INFO - type: train_loss, lr: 0.0002, epoch: 3, step: 1600 iteration_time: 0.3484166049957275 elbo: 3.9156038761138916 elbo_filtered: 3.9156038761138916 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:38:51,557 - INFO - 1 Epoch Finished - duration:144.85104131698608
+2024-12-08 22:38:51,557 - INFO - Intiating validation.
+2024-12-08 22:38:55,624 - INFO - type: eval_loss, epoch: 3, step: 1656 n_batches: 46 elbo: 6.1549296 elbo_filtered: 6.1549296 rate: 0.004219392 distortion: 6.1507096 
+2024-12-08 22:38:56,307 - INFO - Starting epoch4
+2024-12-08 22:38:56,626 - INFO - Printing samples to ./saved_models\final_code/displaying_images_4.png
+2024-12-08 22:39:12,296 - INFO - type: train_loss, lr: 0.0002, epoch: 4, step: 1700 iteration_time: 0.34860294580459594 elbo: 3.9052741527557373 elbo_filtered: 3.9052741527557373 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:39:46,998 - INFO - type: train_loss, lr: 0.0002, epoch: 4, step: 1800 iteration_time: 0.34649139404296875 elbo: 3.8832690715789795 elbo_filtered: 3.8832690715789795 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:40:22,079 - INFO - type: train_loss, lr: 0.0002, epoch: 4, step: 1900 iteration_time: 0.3502911901473999 elbo: 3.864546537399292 elbo_filtered: 3.864546537399292 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:40:57,080 - INFO - type: train_loss, lr: 0.0002, epoch: 4, step: 2000 iteration_time: 0.34975691556930544 elbo: 3.865513801574707 elbo_filtered: 3.865513801574707 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:41:21,541 - INFO - 1 Epoch Finished - duration:145.2333173751831
+2024-12-08 22:41:21,541 - INFO - Intiating validation.
+2024-12-08 22:41:25,531 - INFO - type: eval_loss, epoch: 4, step: 2070 n_batches: 46 elbo: 6.109488 elbo_filtered: 6.109488 rate: 0.0063927425 distortion: 6.103095 
+2024-12-08 22:41:26,212 - INFO - Starting epoch5
+2024-12-08 22:41:26,551 - INFO - Printing samples to ./saved_models\final_code/displaying_images_5.png
+2024-12-08 22:41:37,561 - INFO - type: train_loss, lr: 0.0002, epoch: 5, step: 2100 iteration_time: 0.3541363024711609 elbo: 3.840414047241211 elbo_filtered: 3.840414047241211 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:42:13,073 - INFO - type: train_loss, lr: 0.0002, epoch: 5, step: 2200 iteration_time: 0.3549402832984924 elbo: 3.8181095123291016 elbo_filtered: 3.8181095123291016 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:42:48,299 - INFO - type: train_loss, lr: 0.0002, epoch: 5, step: 2300 iteration_time: 0.3519070959091187 elbo: 3.8122756481170654 elbo_filtered: 3.8122756481170654 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:43:23,323 - INFO - type: train_loss, lr: 0.0002, epoch: 5, step: 2400 iteration_time: 0.3498570704460144 elbo: 3.8103649616241455 elbo_filtered: 3.8103649616241455 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:43:52,244 - INFO - 1 Epoch Finished - duration:146.0324568748474
+2024-12-08 22:43:52,246 - INFO - Intiating validation.
+2024-12-08 22:43:56,246 - INFO - type: eval_loss, epoch: 5, step: 2484 n_batches: 46 elbo: 6.0618606 elbo_filtered: 6.0618606 rate: 0.010548533 distortion: 6.051312 
+2024-12-08 22:43:56,988 - INFO - Starting epoch6
+2024-12-08 22:43:57,316 - INFO - Printing samples to ./saved_models\final_code/displaying_images_6.png
+2024-12-08 22:44:03,316 - INFO - type: train_loss, lr: 0.0002, epoch: 6, step: 2500 iteration_time: 0.349010968208313 elbo: 3.786982774734497 elbo_filtered: 3.786982774734497 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:44:38,409 - INFO - type: train_loss, lr: 0.0002, epoch: 6, step: 2600 iteration_time: 0.3505477142333984 elbo: 3.7851784229278564 elbo_filtered: 3.7851784229278564 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:45:13,734 - INFO - type: train_loss, lr: 0.0002, epoch: 6, step: 2700 iteration_time: 0.35296461582183836 elbo: 3.7818655967712402 elbo_filtered: 3.7818655967712402 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:45:49,089 - INFO - type: train_loss, lr: 0.0002, epoch: 6, step: 2800 iteration_time: 0.3530738091468811 elbo: 3.772705316543579 elbo_filtered: 3.772705316543579 rate_nans: 0 skipped_updates: 0 
+2024-12-08 22:46:23,460 - INFO - 1 Epoch Finished - duration:146.47206449508667
+2024-12-08 22:46:23,460 - INFO - Intiating validation.
+2024-12-08 22:46:27,451 - INFO - type: eval_loss, epoch: 6, step: 2898 n_batches: 46 elbo: 6.013416 elbo_filtered: 6.013416 rate: 0.017430125 distortion: 5.9959865 
+2024-12-08 22:46:28,191 - INFO - Starting epoch7
+2024-12-08 22:46:28,502 - INFO - Printing samples to ./saved_models\final_code/displaying_images_7.png
+2024-12-08 22:46:29,523 - INFO - type: train_loss, lr: 0.0002, epoch: 7, step: 2900 iteration_time: 0.3536834192276001 elbo: 3.7584404945373535 elbo_filtered: 3.7584404945373535 rate_nans: 0 skipped_updates: 0 

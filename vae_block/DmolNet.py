@@ -10,22 +10,34 @@ class HModule(nn.Module):
 
 
 class DmolNet(nn.Module):
-    def __init__(self, H):
+    def __init__(self, Hyperparameters):
         super().__init__()
-        self.H = H
-        self.width = H.width
-        self.out_conv = get_conv(H.width, H.num_mixtures * 10, kernel_size=1, stride=1, padding=0)
+        self.H = Hyperparameters
+        self.width = Hyperparameters.width
+        self.out_conv = get_conv(
+            Hyperparameters.width, 
+            Hyperparameters.num_mixtures * 10, 
+            kernel_size=1, 
+            stride=1, 
+            padding=0
+        )
 
-    def nll(self, px_z, x):
-        return discretized_mix_logistic_loss(x=x, l=self.forward(px_z), low_bit=self.H.dataset in ['ffhq_256'])
+    def negative_likelihood(self, p_x_when_z, x):
+        low_bit_setting = self.H.dataset in ['ffhq_256']
+        forward_result = self.forward(p_x_when_z)
+        nll_result = discretized_mix_logistic_loss(x=x, l=forward_result, low_bit=low_bit_setting)
+        return nll_result
 
-    def forward(self, px_z):
-        xhat = self.out_conv(px_z)
-        return xhat.permute(0, 2, 3, 1)
-
-    def sample(self, px_z):
-        im = sample_from_discretized_mix_logistic(self.forward(px_z), self.H.num_mixtures)
-        xhat = (im + 1.0) * 127.5
-        xhat = xhat.detach().cpu().numpy()
-        xhat = np.minimum(np.maximum(0.0, xhat), 255.0).astype(np.uint8)
+    def forward(self, p_x_when_z):
+        conv_output = self.out_conv(p_x_when_z)
+        xhat = conv_output.permute(0, 2, 3, 1)
         return xhat
+
+    def get_sample(self, p_x_when_z):
+        forward_output = self.forward(p_x_when_z)
+        sampled_image = sample_from_discretized_mix_logistic(forward_output, self.H.num_mixtures)
+        x_hat = (sampled_image + 1.0) * 127.5
+        x_hat_clamped = np.minimum(np.maximum(0.0, x_hat.detach().cpu().numpy()), 255.0)
+        final_output = x_hat_clamped.astype(np.uint8)
+
+        return final_output

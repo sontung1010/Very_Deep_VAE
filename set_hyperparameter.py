@@ -1,6 +1,5 @@
 HPARAMS_REGISTRY = {}
 
-
 class Hyperparams(dict):
     def __getattr__(self, attr):
         try:
@@ -9,21 +8,6 @@ class Hyperparams(dict):
             return None
     def __setattr__(self, attr, value):
         self[attr] = value
-
-
-cifar10 = Hyperparams()
-cifar10.width = 384
-cifar10.lr = 0.0002
-cifar10.zdim = 16
-cifar10.wd = 0.01
-cifar10.dec_blocks = "1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21"
-cifar10.enc_blocks = "32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3"
-cifar10.warmup_iters = 100
-cifar10.dataset = 'cifar10'
-cifar10.n_batch = 16
-cifar10.ema_rate = 0.9999
-HPARAMS_REGISTRY['cifar10'] = cifar10
-
 
 flower32 = Hyperparams()
 flower32.width = 384
@@ -37,6 +21,19 @@ flower32.dataset = 'flower32'
 flower32.n_batch = 16
 flower32.ema_rate = 0.9999
 HPARAMS_REGISTRY['flower32'] = flower32
+
+cifar10 = Hyperparams()
+cifar10.width = 384
+cifar10.lr = 0.0002
+cifar10.zdim = 16
+cifar10.wd = 0.01
+cifar10.dec_blocks = "1x1,4m1,4x2,8m4,8x5,16m8,16x10,32m16,32x21"
+cifar10.enc_blocks = "32x11,32d2,16x6,16d2,8x6,8d2,4x3,4d4,1x3"
+cifar10.warmup_iters = 100
+cifar10.dataset = 'cifar10'
+cifar10.n_batch = 16
+cifar10.ema_rate = 0.9999
+HPARAMS_REGISTRY['cifar10'] = cifar10
 
 
 def parse_args_and_update_hparams(H, parser, s=None):
@@ -57,7 +54,7 @@ def add_vae_arguments(parser):
     parser.add_argument('--port', type=int, default=29500)
     parser.add_argument('--save_dir', type=str, default='./saved_models')
     parser.add_argument('--data_root', type=str, default='./')
-    parser.add_argument('--desc', type=str, default='dec07_cifar')
+    parser.add_argument('--desc', type=str, default='final_code')
     parser.add_argument('--hparam_sets', '--hps', type=str)
     parser.add_argument('--restore_path', type=str, default=None)
     parser.add_argument('--restore_ema_path', type=str, default=None)

@@ -1,7 +1,7 @@
 from torch import nn
 import torch
-from vae_block.vae_helpers import parse_layer_string, get_width_settings
-from vae_block.vae_helpers import get_3x3
+from vae_block.vae_helpers import prepare_string, from_parameter_get_width
+from vae_block.vae_helpers import convolution_3x3
 import numpy as np
 from vae_block.base_block import Block
 from vae_block.DmolNet import DmolNet, HModule
@@ -14,19 +14,23 @@ class Encoder(HModule):
     def build(self):
         H = self.H  # Hyperparameters or configuration settings
         # Initial convolution layer to process input image channels into the initial width
-        self.in_conv = get_3x3(H.image_channels, H.width)
+        self.initial_conv = convolution_3x3(H.image_channels, H.width)
         # Determine the width settings for different resolutions based on provided configuration
-        self.widths = get_width_settings(H.width, H.custom_width_str)
+        self.widths = from_parameter_get_width(H.width, H.custom_width_str)
+        #print(type(self.widths))
         # List to store the encoding blocks
-        enc_blocks = []
+        encoder_block_list = []
         # Parse the block definitions string to get resolution and down-sampling settings
-        blockstr = parse_layer_string(H.enc_blocks)
+        blockstr = prepare_string(H.enc_blocks)
         
         for res, down_rate in blockstr:
             # Use 3x3 convolutions only for resolutions larger than 2x2
-            use_3x3 = res > 2
+            if res > 2:
+                use_3x3 = True
+            else: 
+                use_3x3 = False
             # Append a Block to the encoder with specified parameters
-            enc_blocks.append(
+            encoder_block_list.append(
                 Block(
                     self.widths[res],  # Input width at this resolution
                     int(self.widths[res] * H.bottleneck_multiple),  # Bottleneck width
@@ -39,10 +43,10 @@ class Encoder(HModule):
         
         # Normalize the initialization of the final layer in each block to prevent high variance
         n_blocks = len(blockstr)
-        for b in enc_blocks:
+        for b in encoder_block_list:
             b.conv4.weight.data *= np.sqrt(1 / n_blocks)  # Scale weights inversely to the number of blocks
         # Store the encoding blocks as a ModuleList to register them as submodules
-        self.enc_blocks = nn.ModuleList(enc_blocks)
+        self.enc_blocks = nn.ModuleList(encoder_block_list)
 
     
     def padding_channel(self, t, width):
@@ -51,24 +55,23 @@ class Encoder(HModule):
         empty[:, :dim2, :, :] = t  # Copy the original tensor's channels into the new tensor
         return empty
 
-
     def forward(self, x):
         # Permute input tensor from (batch, height, width, channels) to (batch, channels, height, width)
         x = x.permute(0, 3, 1, 2).contiguous()
-        x = self.in_conv(x)
+        x = self.initial_conv(x)
         
         # Dictionary to store intermediate activations at each resolution
         activations = {}
-        activations[x.shape[2]] = x  # Store the activation for the initial resolution
+        activations[x.shape[2]] = x 
         
-        # Process the input through the sequence of encoder blocks
         for block in self.enc_blocks:
-            x = block(x)  # Apply the block
-            # Get the current resolution (height/width)
+            x = block(x) 
             res = x.shape[2]
-            # Ensure the output has the expected width by padding channels if necessary
-            x = x if x.shape[1] == self.widths[res] else self.padding_channel(x, self.widths[res])
-            # Store the activation for the current resolution
+            if x.shape[1] == self.widths[res]:
+                updated_x = x
+            else:
+                updated_x = self.padding_channel(x, self.widths[res])
+            x = updated_x
             activations[res] = x
         # Return the dictionary of activations at different resolutions
         return activations

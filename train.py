@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 
 # importing from another files
 from data import prepare_data
-from utils_train import check_nans, create_logger, load_optimizer, stats_batch_processing, saving_model, update_ema, add_row_train, add_row_val
+from utils_train import check_nans, create_logger, load_optimizer, stats_batch_processing, saving_model, ema_vae_update, add_row_train, add_row_val
 from visualization import create_images, create_images_test, get_displaying_data, formatting_text, formatting_text_validation
 from train_setup import hyperparameter_setting, load_model_custom
 
@@ -25,7 +25,7 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
     images_visualization_original, images_visualization_processed = get_displaying_data(validation_dataset, preprocess_fn, visualization_number, logger)
     stats = []
     iters_since_starting = 0
-    optimizer, scheduler, cur_eval_loss, iterate, starting_epoch = load_optimizer(H, vae, logger)
+    optimizer, scheduler, eval_loss_cur, iterate, starting_epoch = load_optimizer(H, vae, logger)
     
     H.ema_rate = torch.as_tensor(H.ema_rate).cuda()
 
@@ -65,13 +65,14 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
             grad_norm = torch.nn.utils.clip_grad_norm_(vae.parameters(), H.grad_clip).item() # limiting gradient value to H.grad_clip
 
             # check for norm value in distortion and rate
+            ## This part is for gradient skipping
             return_dict = check_nans(forward_result)
             forward_result.update(return_dict)
             skipped_updates = 1
             if forward_result['distortion_nans'] == 0 and forward_result['rate_nans'] == 0 and (H.skip_threshold == -1 or grad_norm < H.skip_threshold):
                 optimizer.step()
                 skipped_updates = 0
-                update_ema(vae, ema_vae, H.ema_rate)
+                ema_vae_update(vae, ema_vae, H.ema_rate)
 
             step_end = time.time()
             step_duration = step_end - step_start

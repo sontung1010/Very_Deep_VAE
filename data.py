@@ -2,9 +2,8 @@ import numpy as np
 import pickle
 import os
 import torch
+
 from torch.utils.data import Dataset
-from torchvision.datasets import ImageFolder
-import torchvision.transforms as transforms
 from sklearn.model_selection import train_test_split
 from PIL import Image
 
@@ -19,16 +18,15 @@ class CustomDataset(Dataset):
         return len(self.data)
 
 def prepare_data(config):
-    normalization_params = {
+    dataset_normalization_params = {
         'cifar10': {'shift': -120.63838, 'scale': 1. / 64.16736},
-        'imagenet32': {'shift': -116.2373, 'scale': 1. / 69.37404},
-        'imagenet64': {'shift': -115.92961967, 'scale': 1. / 69.37404},
+        # mean and sd of custom dataset was calculated using preprocessing_custom_dataset.py
         'flower32' : {'shift': -100.11472258, 'scale': 1. / 66.41444},
     }
     loss_params = {'shift_loss': -127.5, 'scale_loss': 1. / 127.5}
 
-    if config.dataset not in normalization_params:
-        raise ValueError(f"Dataset '{config.dataset}' is not recognized!")
+    if config.dataset not in dataset_normalization_params:
+        print("Error")
     if config.dataset == 'cifar10':
         train_data, val_data, test_data = load_cifar10(config.data_root)
         config.image_size, config.image_channels = 32, 3
@@ -36,7 +34,7 @@ def prepare_data(config):
         train_data, val_data, test_data = load_flower32(config.data_root)
         config.image_size, config.image_channels = 32, 3
     else:
-        raise ValueError(f"Dataset '{config.dataset}' is not recognized!")
+        print("Error on dataset loading")
 
     if config.test_eval:
         print("test dataset is validation set")
@@ -44,13 +42,13 @@ def prepare_data(config):
     else:
         print("seperate test set")
         eval_data = val_data
-    shift, scale = map_to_tensor(normalization_params[config.dataset])
+    shift, scale = map_to_tensor(dataset_normalization_params[config.dataset])
     shift_loss, scale_loss = map_to_tensor(loss_params)
     train_dataset = CustomDataset(torch.as_tensor(train_data))
     eval_dataset = CustomDataset(torch.as_tensor(eval_data))
     transpose_required = False
 
-    def preprocess(data_batch):
+    def preprocess_function(data_batch):
         nonlocal shift, scale, shift_loss, scale_loss, transpose_required
         inputs = data_batch[0].to(torch.float32).cuda(non_blocking=True)
         outputs = inputs.clone()
@@ -62,16 +60,11 @@ def prepare_data(config):
         outputs.add_(shift_loss).mul_(scale_loss)
         return inputs, outputs
 
-    return config, train_dataset, eval_dataset, preprocess
+    return config, train_dataset, eval_dataset, preprocess_function
 
 def map_to_tensor(params):
     return_value = {value: torch.tensor([value]).cuda().view(1, 1, 1, 1) for key, value in params.items()}
     return return_value
-
-def load_imagenet32(root):
-    train_data = np.load(os.path.join(root, 'imagenet32-train.npy'), mmap_mode='r')
-    indices = np.random.permutation(train_data.shape[0])
-    return train_data[indices[:-5000]], train_data[indices[-5000:]], np.load(os.path.join(root, 'imagenet32-valid.npy'))
 
 def mkdir_from_path(path):
     os.makedirs(path, exist_ok=True)

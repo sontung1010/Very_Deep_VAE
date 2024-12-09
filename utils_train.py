@@ -60,7 +60,7 @@ def load_optimizer(H, vae, logger):
     return optimizer, scheduler, cur_eval_loss, iterate, starting_epoch
 
 
-def update_ema(vae, ema_vae, ema_rate):
+def ema_vae_update(vae, ema_vae, ema_rate):
     vae_params = list(vae.parameters())
     ema_vae_params = list(ema_vae.parameters())
     for i in range(len(vae_params)):

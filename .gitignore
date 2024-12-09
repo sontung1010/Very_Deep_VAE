@@ -9,6 +9,7 @@ saved_models/
 saved_models/test
 saved_models/dec07_cifar
 102flowers
+training_log.txt
 
 # Ignore virtual environments
 env/

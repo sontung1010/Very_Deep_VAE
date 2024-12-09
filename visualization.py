@@ -54,14 +54,14 @@ def create_images_test(H, ema_vae, viz_batch_original, viz_batch_processed, fnam
     lv_points = np.floor(np.linspace(0, 1, H.num_variables_visualize + 2) * len(zs)).astype(int)[1:-1]
     for i in lv_points:
         #print("printing i:", i)
-        batches.append(ema_vae.forward_samples_set_latents(mb, zs[:i], t=0.1))
+        batches.append(ema_vae.forward_samples_set_latents(mb, zs[:i], temperature=0.1))
     #print(np.shape(batches))
     #print(type(batches))
     plt_plotting(np.array(batches), fname)
 
     unconditional = []
     for i in range(14):
-        unconditional.append(ema_vae.forward_uncond_samples(mb, t=1))
+        unconditional.append(ema_vae.forward_unconditional_samples(mb, temperature=1))
     unconditional_plotting(np.array(unconditional), fname[:-4] + '_uncond.png')
 
 
@@ -72,9 +72,9 @@ def create_images(H, ema_vae, viz_batch_original, viz_batch_processed, fname, lo
     
     lv_points = np.floor(np.linspace(0, 1, H.num_variables_visualize + 2) * len(zs)).astype(int)[1:-1]
     for i in lv_points:
-        batches.append(ema_vae.forward_samples_set_latents(mb, zs[:i], t=0.1))
+        batches.append(ema_vae.forward_samples_set_latents(mb, zs[:i], temperature=0.1))
     for t in [1.0, 0.9, 0.8, 0.7][:H.num_temperatures_visualize]:
-        batches.append(ema_vae.forward_uncond_samples(mb, t=t))
+        batches.append(ema_vae.forward_unconditional_samples(mb, temperature=t))
     
     # Combine all batches into a single image
     n_rows = len(batches)

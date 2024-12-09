@@ -1,36 +1,41 @@
 from torch import nn
 from torch.nn import functional as F
-from vae_block.vae_helpers import get_1x1, get_3x3
+from vae_block.vae_helpers import convolution_1x1, convolution_3x3
 
 
 class Block(nn.Module):
     def __init__(self, input_channels, intermediate_channels, output_channels, down_sample_rate=None, use_residual=False, zero_last=False, use_3x3=True):
         super().__init__()
+
+        # 1x1 convolution from input_channels to intermediate_channels
+        self.conv1 = convolution_1x1(input_channels, intermediate_channels)
+        # 3x3 convolution (or 1x1 if use_3x3 is False)
+        if use_3x3 == True :
+            self.conv2 = convolution_3x3(intermediate_channels, intermediate_channels)
+        else :
+            self.conv2 = convolution_1x1(intermediate_channels, intermediate_channels)
+        if use_3x3 == True:
+            self.conv3 = convolution_3x3(intermediate_channels, intermediate_channels)
+        else:
+            self.conv3 = convolution_1x1(intermediate_channels, intermediate_channels)
+        # 1x1 convolution to project to output_channels (optionally initializing weights to zero)
+        self.conv4 = convolution_1x1(intermediate_channels, output_channels, zero_weights=zero_last)
+
         self.down_sample_rate = down_sample_rate
         self.use_residual = use_residual
-        # 1x1 convolution from input_channels to intermediate_channels
-        self.conv1 = get_1x1(input_channels, intermediate_channels)
-        # 3x3 convolution (or 1x1 if use_3x3 is False)
-        if use_3x3: self.conv2 = get_3x3(intermediate_channels, intermediate_channels)
-        else : self.conv2 = get_1x1(intermediate_channels, intermediate_channels)
-        # Another 3x3 convolution (or 1x1 if use_3x3 is False)
-        if use_3x3 : self.conv3 = get_3x3(intermediate_channels, intermediate_channels)
-        else: self.conv3 = get_1x1(intermediate_channels, intermediate_channels)
-        # 1x1 convolution to project to output_channels (optionally initializing weights to zero)
-        self.conv4 = get_1x1(intermediate_channels, output_channels, zero_weights=zero_last)
 
     def forward(self, inputs):
         # Apply the series of convolutions with GELU activation in between
-        intermediate_output = self.conv1(F.gelu(inputs))
-        intermediate_output = self.conv2(F.gelu(intermediate_output))
-        intermediate_output = self.conv3(F.gelu(intermediate_output))
-        intermediate_output = self.conv4(F.gelu(intermediate_output))
+        output_1 = self.conv1(F.gelu(inputs))
+        output_1 = self.conv2(F.gelu(output_1))
+        output_1 = self.conv3(F.gelu(output_1))
+        output_1 = self.conv4(F.gelu(output_1))
         
         # Add residual connection if specified
-        if self.use_residual:
-            final_output = inputs + intermediate_output
+        if self.use_residual == True:
+            final_output = inputs + output_1
         else :
-            final_output = intermediate_output
+            final_output = output_1
 
         # Optionally apply down-sampling using average pooling
         if self.down_sample_rate is not None:
