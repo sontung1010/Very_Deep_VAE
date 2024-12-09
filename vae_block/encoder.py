@@ -7,15 +7,16 @@ from vae_block.base_block import Block
 from vae_block.DmolNet import DmolNet, HModule
 
 ## Defining the Encoder
+# This is the implementation of the encoder structure.
+# Encoder structure was fairly straight forward.
 # =======================================================================
-
 class Encoder(HModule):
 
     def build(self):
-        H = self.H  # Hyperparameters or configuration settings
+        H = self.H  # Hyperparameters settings
         # Initial convolution layer to process input image channels into the initial width
         self.initial_conv = convolution_3x3(H.image_channels, H.width)
-        # Determine the width settings for different resolutions based on provided configuration
+
         self.widths = from_parameter_get_width(H.width, H.custom_width_str)
         #print(type(self.widths))
         # List to store the encoding blocks
@@ -40,6 +41,7 @@ class Encoder(HModule):
                     use_3x3=use_3x3  # Whether to use 3x3 convolutions
                 )
             )
+            # print(len(encoder_block_list))
         
         # Normalize the initialization of the final layer in each block to prevent high variance
         n_blocks = len(blockstr)

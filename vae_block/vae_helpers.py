@@ -23,7 +23,8 @@ def get_conv(input_dimension, output_dimension, kernel_size, stride, padding, gr
         convolution.weight.data *= 0.0
     return convolution
 
-
+## This is defining convolutions layer for base blocks
+# =========================================================
 def convolution_3x3(input_dim, output_dim, groups=1, scaled=False, zero_bias=True, zero_weights=False):
     convolution_3x3 = get_conv(input_dim, output_dim, 3, 1, 1, groups=groups, scaled=scaled, zero_bias = zero_bias, zero_weights = zero_weights)
     return convolution_3x3
@@ -32,6 +33,12 @@ def convolution_3x3(input_dim, output_dim, groups=1, scaled=False, zero_bias=Tru
 def convolution_1x1(input_dim, output_dim, groups=1, scaled=False, zero_bias=True, zero_weights=False):
     convolution_1x1 = get_conv(input_dim, output_dim, 1, 1, 0, groups=groups, scaled=scaled, zero_bias = zero_bias, zero_weights = zero_weights)
     return convolution_1x1
+
+
+## Code below here is mainly for calculating the probalistic setting in the model.
+# High complexity in the code.
+# We studied the python code from original research (VDVAE) and tried to reproduce based on the original code.
+# ==================================================================================
 
 @torch.jit.script
 def sample_diag_gaussian(mu, logsigma):
@@ -42,8 +49,8 @@ def sample_diag_gaussian(mu, logsigma):
     return return_value
 
 @torch.jit.script
-def compute_gaussian_kl(mu1, mu2, logsigma1, logsigma2):
-    return -0.5 + logsigma2 - logsigma1 + 0.5 * (logsigma1.exp() ** 2 + (mu1 - mu2) ** 2) / (logsigma2.exp() ** 2)
+def compute_gaussian_kl(mu1, mu2, log_sigma1, log_sigma2):
+    return -0.5 + log_sigma2 - log_sigma1 + 0.5 * (log_sigma1.exp() ** 2 + (mu1 - mu2) ** 2) / (log_sigma2.exp() ** 2)
 
 def log_prob_from_logits(x):
     axis = len(x.shape) - 1
@@ -61,19 +68,25 @@ def constant_min(t, constant):
     other = torch.ones_like(t) * constant
     return torch.min(t, other)
 
+
 ## implementation of the loss calculation
 # =======================================================
 def discretized_mix_logistic_loss(x, l, low_bit=False):
+    ## extract the shape of the input tensors
     xs = []
     for s in x.shape:
         xs.append(s)
+    #print(xs)
     ls = []
     for s in l.shape:
-        ls.append(s)  
-    nr_mix = int(ls[-1] / 10)
+        ls.append(s) 
+    #print(ls) 
+    nr_mix = int(ls[-1] / 10) # each have 10
+    # Separate logits for mixture weights
     logit_probs = l[:, :, :, :nr_mix]
     l = torch.reshape(l[:, :, :, nr_mix:], xs + [nr_mix * 3])
 
+    # Extract parameters for the logistic mixture
     means = l[:, :, :, :, :nr_mix]
     log_scales = l[:, :, :, :, nr_mix:2 * nr_mix]
     log_scales = constant_max(log_scales, -7.)
@@ -83,14 +96,17 @@ def discretized_mix_logistic_loss(x, l, low_bit=False):
     x_reshaped = torch.reshape(x, xs + [1])
     zeros_like_x = torch.zeros(xs + [nr_mix]).to(x.device)
     x = x_reshaped + zeros_like_x
+
+    # Compute means for second and third channels
     m2 = means[:, :, :, 1, :] + coeffs[:, :, :, 0, :] * x[:, :, :, 0, :]
     m2 = torch.reshape(m2, [xs[0], xs[1], xs[2], 1, nr_mix])
     m3 = means[:, :, :, 2, :] + coeffs[:, :, :, 1, :] * x[:, :, :, 0, :] + coeffs[:, :, :, 2, :] * x[:, :, :, 1, :]
     m3 = torch.reshape(m3, [xs[0], xs[1], xs[2], 1, nr_mix])
 
+    # Combine means for all channels
     means_channel0 = torch.reshape(means[:, :, :, 0, :], [xs[0], xs[1], xs[2], 1, nr_mix])
     means = torch.cat([means_channel0, m2, m3], dim=3)
-    centered_x = x - means
+    centered_x = x - means # centering from x_means
     inv_stdv = torch.exp(-log_scales)
     if low_bit:
         plus_in = inv_stdv * (centered_x + 1. / 31.)
@@ -102,13 +118,15 @@ def discretized_mix_logistic_loss(x, l, low_bit=False):
         min_in = inv_stdv * (centered_x - 1. / 255.)
     
     cdf_min = torch.sigmoid(min_in)
-    log_cdf_plus = plus_in - F.softplus(plus_in)
-    log_one_minus_cdf_min = -F.softplus(min_in)
+    log_cdf_plus = plus_in - F.softplus(plus_in) # log(sigmoid(plus_in))
+    log_one_minus_cdf_min = -F.softplus(min_in)# log(1 - sigmoid(min_in))
+    #print(type(log_one_minus_cdf_min))
     cdf_delta = cdf_plus - cdf_min
 
     mid_in = inv_stdv * centered_x
     log_pdf_mid = mid_in - log_scales - 2. * F.softplus(mid_in)
 
+    # Compute log probabilities
     if low_bit:
         log_probs = torch.where(x < -0.999,log_cdf_plus,
             torch.where(x > 0.999, log_one_minus_cdf_min,
@@ -119,20 +137,29 @@ def discretized_mix_logistic_loss(x, l, low_bit=False):
             torch.where(x > 0.999, log_one_minus_cdf_min,
                 torch.where(
                     cdf_delta > 1e-5, torch.log(constant_max(cdf_delta, 1e-12)), log_pdf_mid - np.log(127.5))))
+    # Sum log probabilities alonb channels
     log_probs = log_probs.sum(dim=3)
     log_probs = log_probs + log_prob_from_logits(logit_probs)
     mixture_probs = torch.logsumexp(log_probs, -1)
+    # Final loss calculation, negative log likelihood
     final_loss = -1. * mixture_probs.sum(dim=[1, 2]) / np.prod(xs[1:])
     return final_loss
 
 
+## Function below is for sampling the model from mixture of logistic distribution
+# widely used in image generation.
+# =======================================================
 def sample_from_discretized_mix_logistic(l, nr_mix):
+    # Extract the shape of the input tensor
     ls = []
     for s in l.shape:
         ls.append(s)
+    # Dshape for RGB output images
     xs = ls[:-1] + [3]
     logit_probs = l[:, :, :, :nr_mix]
     l = torch.reshape(l[:, :, :, nr_mix:], xs + [nr_mix * 3])
+
+    # mixture indices <- Gumbel-Softmax trick
     eps = torch.empty(logit_probs.shape, device=l.device).uniform_(1e-5, 1. - 1e-5)
     gumbel_noise = -torch.log(-torch.log(eps))
     gumbel_logits = logit_probs - gumbel_noise

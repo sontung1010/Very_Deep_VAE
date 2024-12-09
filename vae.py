@@ -48,8 +48,8 @@ class VAE(HModule):
         # Return the computed metrics
         # In this part, basically returning the ELBO (Loss function) value.
         return dict(
-            elbo=final_loss,  # Evidence Lower Bound
-            distortion=distortion_per_pixel_mean,  # Reconstruction loss
+            elbo=final_loss,  # evidence Lower Bound
+            distortion=distortion_per_pixel_mean,  # reconstruction loss
             rate=rate_mean  # KL divergence regularization term
         )
 
@@ -79,7 +79,6 @@ class VAE(HModule):
         # Samples from the model's output distribution.
         # Generate samples from the decoder without conditioning on input data
         p_x_when_z = self.decoder.forward_uncond(batch_num, temperature=temperature)
-        # Use the output network to sample from the predicted distribution
         return self.decoder.out_net.get_sample(p_x_when_z)
 
 

@@ -11,6 +11,8 @@ saved_models/dec07_cifar
 imagenet_filtered
 102flowers
 training_log.txt
+fixed_cifar_loss_log.csv
+training_log.txt
 
 # Ignore virtual environments
 env/

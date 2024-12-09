@@ -23,7 +23,7 @@ flower32.ema_rate = 0.9999
 HPARAMS_REGISTRY['flower32'] = flower32
 
 imagenet32 = Hyperparams()
-imagenet32.width = 512
+imagenet32.width = 384
 imagenet32.lr = 0.00015
 imagenet32.zdim = 16
 imagenet32.wd = 0.01

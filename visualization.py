@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 import pandas as pd
 
-def get_displaying_data(data, preprocess_fn, num, logger):
-    dataloader = DataLoader(data, batch_size=num)
+def get_displaying_data(data, preprocess_fn, num_data, logger):
+    dataloader = DataLoader(data, batch_size=num_data)
     x = next(iter(dataloader))
     original_image = x
     logger.debug(f"Original image shape: {original_image.shape}")

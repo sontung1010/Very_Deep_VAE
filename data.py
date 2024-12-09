@@ -28,7 +28,10 @@ def prepare_data(config):
 
     if config.dataset not in dataset_normalization_params:
         print("Error")
-    if config.dataset == 'cifar10':
+    if config.dataset == 'imagenet32':
+        train_data, val_data, test_data = load_filtered_imagenet32(config.data_root)
+        config.image_size, config.image_channels = 32, 3
+    elif config.dataset == 'cifar10':
         train_data, val_data, test_data = load_cifar10(config.data_root)
         config.image_size, config.image_channels = 32, 3
     elif config.dataset == 'flower32':
@@ -89,14 +92,14 @@ def load_flower32(root, test_size=0.1, val_size=0.1, random_state=42):
     return train_data, val_data, test_data
 
 def load_filtered_imagenet32(root, test_size=0.1, val_size=0.1, random_state=42):
-    ## This is the custom dataset we used (not tested in original paper)
+    ## This is the filtered imagenet32 dataset (10,000 images)
     # ========================================================================
     images = []
 
-    for file_name in os.listdir(root + 'imagenet_filtered/processed_png'):
+    for file_name in os.listdir(root + 'imagenet_filtered/processed'):
         if file_name.endswith('.png'):
             # Load the image
-            image_path = os.path.join(root + 'imagenet_filtered/processed_png', file_name)
+            image_path = os.path.join(root + 'imagenet_filtered/processed', file_name)
             image = Image.open(image_path).convert("RGB") 
             image_array = np.array(image, dtype=np.uint8)
             images.append(image_array)
@@ -118,5 +121,6 @@ def load_cifar10(root):
     train_data = train_data.reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
     test_data = test_data.reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
     train_data, val_data = train_test_split(train_data, test_size=5000, random_state=42)
+    print(len(train_data), len(val_data), len(test_data))
     return train_data, val_data, test_data
 
