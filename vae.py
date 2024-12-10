@@ -78,7 +78,7 @@ class VAE(HModule):
         # Returns:
         # Samples from the model's output distribution.
         # Generate samples from the decoder without conditioning on input data
-        p_x_when_z = self.decoder.forward_uncond(batch_num, temperature=temperature)
+        p_x_when_z = self.decoder.forward_unconditional(batch_num, temperature=temperature)
         return self.decoder.out_net.get_sample(p_x_when_z)
 
 

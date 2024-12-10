@@ -14,98 +14,100 @@ class DecBlock(nn.Module):
     # =======================================================================
     def __init__(self, H, resolution, mixin, n_blocks):
         super().__init__()
-        self.base = resolution  
-        self.mixin = mixin
         self.H = H
-        
+
+
+        self.base = resolution  
+        # print(self.base)
+        self.mixin = mixin
         # Recieving width settings from hyperparameters
         self.widths = from_parameter_get_width(H.width, H.custom_width_str)
-        width = self.widths[resolution]  # width for the current resolution
-        
-        use_3x3 = resolution > 2 
-        cond_width = int(width * H.bottleneck_multiple) 
+        w_here = self.widths[resolution]  # width for the current resolution
+        if resolution > 2:
+            use_3x3 = True
+        else:
+            use_3x3 = False
+        conditional_width = int(w_here * H.bottleneck_multiple) 
         self.zdim = H.zdim 
         
         # Encoder block to calculate latent parameters
-        self.enc = Block(width * 2, cond_width, H.zdim * 2, use_residual=False, use_3x3=use_3x3)
-        
-        # Prior block to compute prior distribution parameters (mean and variance) and add additional features to `x`
-        self.prior = Block(width, cond_width, H.zdim * 2 + width, use_residual=False, use_3x3=use_3x3, zero_last=True)
-        
-        # Projection layer to map latent samples (z) to the desired width
-        self.z_proj = convolution_1x1(H.zdim, width)
-        self.z_proj.weight.data *= np.sqrt(1 / n_blocks)
+        output_dim = H.zdim * 2
+        self.enc = Block(w_here * 2, conditional_width, output_dim, use_residual=False, use_3x3=use_3x3)
+        self.prior = Block(w_here, conditional_width, output_dim + w_here, use_residual=False, use_3x3=use_3x3, zero_last=True)
         
         # Residual block for refining features
-        self.resnet = Block(width, cond_width, width, use_residual=True, use_3x3=use_3x3)
+        self.resnet = Block(w_here, conditional_width, w_here, use_residual=True, use_3x3=use_3x3)
         self.resnet.conv4.weight.data *= np.sqrt(1 / n_blocks)
+
+        # Projection layer to map latent samples z to the desired width
+        self.z_proj = convolution_1x1(H.zdim, w_here)
+        self.z_proj.weight.data *= np.sqrt(1 / n_blocks)
         self.z_fn = lambda x: self.z_proj(x)
 
     def get_sample(self, x, acts):
-        # Compute mean and variance for the approximate posterior (q)
-        qm, qv = self.enc(torch.cat([x, acts], dim=1)).chunk(2, dim=1)
+        # Compute mean and variance for the approximate posterior q
+        output = self.enc(torch.cat([x, acts], dim=1))
+        split_size = output.size(1) // 2
+        q_m, q_v = torch.split(output, split_size, dim=1)
         
-        # Compute prior distribution parameters (p) and additional features (xpp)
+        # prior distribution parameters p and additional features xpp
         feats = self.prior(x)
-        pm, pv, xpp = feats[:, :self.zdim, ...], feats[:, self.zdim:self.zdim * 2, ...], feats[:, self.zdim * 2:, ...]
+        p_m, p_v, xpp = feats[:, :self.zdim, ...], feats[:, self.zdim:self.zdim * 2, ...], feats[:, self.zdim * 2:, ...]
         
-        # Update `x` with the additional features
+        # updte x with the additional features
         x = x + xpp
-        # Sample `z` from the approximate posterior
-        z = sample_diag_gaussian(qm, qv)
-        # Compute KL divergence between the posterior and the prior
-        kl = compute_gaussian_kl(qm, pm, qv, pv)
+        # sample z from the approximate posterior
+        z = sample_diag_gaussian(q_m, q_v)
+        # compute KL divergence among posterior and the prior
+        kl_gaussian = compute_gaussian_kl(q_m, p_m, q_v, p_v)
         
-        return z, x, kl
+        return z, x, kl_gaussian
 
     # Unconditional sampling from the prior
-    def sample_uncond(self, x, t=None, lvs=None):
-        n, c, h, w = x.shape  # Get the shape of the input tensor
+    def unconditional_sampling(self, x, t=None, lvs=None):
+        ## n, c, h, w = x.shape
         # print(n, c, h, w)
+        # print(h,w)
 
-        # Compute prior distribution parameters (p) and additional features (xpp)
-        # Update `x` with the additional features
+        # Compute prior distribution parameters p and additional features xpp
+        # Update x with the additional features
         feats = self.prior(x)
-        pm, pv, xpp = feats[:, :self.zdim, ...], feats[:, self.zdim:self.zdim * 2, ...], feats[:, self.zdim * 2:, ...]
+        p_m, p_v, xpp = feats[:, :self.zdim, ...], feats[:, self.zdim:self.zdim * 2, ...], feats[:, self.zdim * 2:, ...]
         x = x + xpp
-        
-        # Use provided latent variables (lvs) if available
+        # print(x)
+        # Use provided latent variables lvs
         if lvs is not None:
             z = lvs
         else:
-            # Adjust variance with temperature `t` if specified
+            # temperature
             if t is not None:
-                pv = pv + torch.ones_like(pv) * np.log(t)
-            # Sample `z` from the prior
-            z = sample_diag_gaussian(pm, pv)
-        
+                p_v = p_v + torch.ones_like(p_v) * np.log(t)
+            # Sample z from the prior
+            z = sample_diag_gaussian(p_m, p_v)
         return z, x
 
-    # Retrieve inputs for the current block from activations and previously computed values
-    def get_inputs(self, xs, activations):
-        acts = activations[self.base]  # Activation for the current resolution
-        try:
-            x = xs[self.base]  # Previously computed value for this resolution
-        except KeyError:
-            # If not available, initialize `x` as zeros with the same shape as `acts`
-            x = torch.zeros_like(acts)
-        # Repeat `x` to match the batch size of `acts` if necessary
-        if acts.shape[0] != x.shape[0]:
-            x = x.repeat(acts.shape[0], 1, 1, 1)
-        return x, acts
 
     # Forward pass for the decoder block
     def forward(self, xs, activations, get_latents=False):
-        # Get inputs for this block
-        x, acts = self.get_inputs(xs, activations)
-        
+        # Get inputs for this block      
+        activation = activations[self.base]
+        try:
+            x = xs[self.base]  # previously computed value for this resolution
+        except KeyError:
+            # initialize x as zeros with the same shape as acts
+            x = torch.zeros_like(activation)
+
+        # Repeat x to match the batch size of acts if necessary
+        if activation.shape[0] != x.shape[0]:
+            x = x.repeat(activation.shape[0], 1, 1, 1)
+
         # Add mixed-in resolution if specified
         if self.mixin is not None:
             x = x + F.interpolate(xs[self.mixin][:, :x.shape[1], ...], scale_factor=self.base // self.mixin)
         
-        # Sample latent variable `z` and compute KL divergence
-        z, x, kl = self.get_sample(x, acts)
-        # Update `x` with the latent variable projection
+        # latent variable z and compute KL divergence
+        z, x, kl = self.get_sample(x, activation)
+        # Update x
         x = x + self.z_fn(z)
         # Refine features using the residual block
         x = self.resnet(x)
@@ -117,114 +119,107 @@ class DecBlock(nn.Module):
         return xs, dict(kl=kl)
 
     # Forward pass for unconditional sampling
-    def forward_uncond(self, xs, t=None, lvs=None):
+    def forward_unconditional(self, xs, t=None, lvs=None):
         try:
-            x = xs[self.base]  # Retrieve input for the current resolution
+            x = xs[self.base]
         except KeyError:
-            ref = xs[list(xs.keys())[0]] # If not available, initialize `x` as zeros with the appropriate shape
+            ref = xs[list(xs.keys())[0]] # initialize x as zeros with the appropriate shape
             x = torch.zeros(dtype=ref.dtype, size=(ref.shape[0], self.widths[self.base], self.base, self.base), device=ref.device)
         
-        # Add mixed-in resolution if specified
+        # Add mixed in resolution if specified
         if self.mixin is not None:
             x = x + F.interpolate(xs[self.mixin][:, :x.shape[1], ...], scale_factor=self.base // self.mixin)
         
-        z, x = self.sample_uncond(x, t, lvs=lvs) # Sample latent variable `z` from the prior
-        x = x + self.z_fn(z) # Update `x` with the latent variable projection
+        z, x = self.unconditional_sampling(x, t, lvs=lvs) # sample latent variable z from the prior
+        x = x + self.z_fn(z) # Update x with the latent variable project.
         x = self.resnet(x) # Refine features using the residual block
-        xs[self.base] = x # Store the updated `x` in the dictionary
+        xs[self.base] = x
         return xs
 
 
 # Define the Decoder class, responsible for reconstructing data from hierarchical latent representations
 class Decoder(HModule):
     def build(self):
-        H = self.H  # Hyperparameters or configuration settings
+        # Hyperparameters settings
+        H = self.H  
         resos = set()
         dec_blocks = []
         
         # Get width settings for different resolutions
         self.widths = from_parameter_get_width(H.width, H.custom_width_str)
-        
-        # Parse the block definitions string to create decoder blocks
+        # Parse the block definitions string
         blocks = prepare_string(H.dec_blocks)
-        for idx, (res, mixin) in enumerate(blocks):
-            dec_blocks.append(DecBlock(H, res, mixin, n_blocks=len(blocks))) # Append a decoder block for the given resolution and mixin
-            resos.add(res)  # Add resolution to the set
-        
-        # Sort the resolutions in ascending order
-        self.resolutions = sorted(resos)
-        
-        # Store decoder blocks as a ModuleList to register them as submodules
+        for _, (res, mixin) in enumerate(blocks):
+            dec_blocks.append(DecBlock(H, res, mixin, n_blocks=len(blocks))) # apend a decoder block for the given resolution and mixin
+            resos.add(res)
         self.dec_blocks = nn.ModuleList(dec_blocks)
-        
+         # resolutions
+        self.resolutions = sorted(resos)
+
         # Create bias parameters for each resolution, up to the specified resolution limit
-        self.bias_xs = nn.ParameterList([
-            nn.Parameter(torch.zeros(1, self.widths[res], res, res)) 
-            for res in self.resolutions if res <= H.no_bias_above
-        ])
+        bias_xs_list = []
+        for res in self.resolutions:
+            if res <= H.no_bias_above:
+                bias_xs_list.append(nn.Parameter(torch.zeros(1, self.widths[res], res, res)))
+        self.bias_xs = nn.ParameterList(bias_xs_list)
         
-        # Output network that maps the final decoder outputs to the model's distribution
+        # output -> maps the final decoder outputs to the model's distribution
         self.out_net = DmolNet(H)
-        
-        # Gain and bias parameters applied to the final output
         self.gain = nn.Parameter(torch.ones(1, H.width, 1, 1))
         self.bias = nn.Parameter(torch.zeros(1, H.width, 1, 1))
         
         # Lambda function for applying the gain and bias
         self.final_fn = lambda x: x * self.gain + self.bias
 
-    def forward(self, activations, get_latents=False):
-        # List to collect statistics (e.g., KL divergence) from each decoder block
-        stats = []
-        
-        # Initialize `xs` with biases for the available resolutions
-        xs = {a.shape[2]: a for a in self.bias_xs}
-        
+    def forward(self, activations, get_latents=False):        
+        # Initialize xs with biases for the available resolutions
+        xs = {}
+        for a in self.bias_xs:
+            xs[a.shape[2]] = a
+
+        # List to collect statistics from each block
+        statistics = []
+
         # Pass activations and latent states through each decoder block
         for block in self.dec_blocks:
             xs, block_stats = block(xs, activations, get_latents=get_latents)
-            stats.append(block_stats)  # Collect statistics from each block
-        
-        # Apply final scaling and bias to the output at the target resolution
-        xs[self.H.image_size] = self.final_fn(xs[self.H.image_size])
-        
-        # Return the reconstructed image and collected statistics
-        return xs[self.H.image_size], stats
 
-    def forward_uncond(self, n, temperature=None, y=None):
-        # Unconditional forward pass, typically used for sampling
+            statistics.append(block_stats)
         
-        # Initialize `xs` with repeated biases for the batch size `n`
+        # apply final scaling and bias to the output
+        xs[self.H.image_size] = self.final_fn(xs[self.H.image_size])
+        # Output image
+        return xs[self.H.image_size], statistics
+
+    def forward_unconditional(self, n, temperature=None, y=None):
+      
+        # Initialize xs with repeated biases, batch size n
         xs = {}
         for bias in self.bias_xs:
             xs[bias.shape[2]] = bias.repeat(n, 1, 1, 1)
         
-        # Pass through each decoder block for unconditional sampling
+        # pas through each decoder block for unconditional sampling
         for idx, block in enumerate(self.dec_blocks):
-            # Handle per-block temperature if specified
+            # handling temperature (each block) if specified
             try:
                 temp = temperature[idx]
             except TypeError:
                 temp = temperature
-            xs = block.forward_uncond(xs, temp)
+            xs = block.forward_unconditional(xs, temp)
         
         # Apply final scaling and bias to the output at the target resolution
         xs[self.H.image_size] = self.final_fn(xs[self.H.image_size])
-        
-        # Return the reconstructed image
         return xs[self.H.image_size]
 
     def forward_with_manual_latent_varialbes(self, n, latent_variables, temperature=None):
         # Forward pass with manually provided latent variables
-        
-        # Initialize `xs` with repeated biases for the batch size `n`
         xs = {}
         for bias in self.bias_xs:
             xs[bias.shape[2]] = bias.repeat(n, 1, 1, 1)
         
-        # Pass through each decoder block using provided latent variables
+        # pass through each decoder block using provided latent variables
         for block, lvs in itertools.zip_longest(self.dec_blocks, latent_variables):
-            xs = block.forward_uncond(xs, temperature, lvs=lvs)
+            xs = block.forward_unconditional(xs, temperature, lvs=lvs)
         
         # Apply final scaling and bias to the output at the target resolution
         xs[self.H.image_size] = self.final_fn(xs[self.H.image_size])

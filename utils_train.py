@@ -15,6 +15,8 @@ def check_nans(forward_result):
     }
     return return_dict
 
+# this is for logging
+# In reproduction we used more familiar logger
 def create_logger(logger_name, log_file = "log_files.txt"):
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.INFO)

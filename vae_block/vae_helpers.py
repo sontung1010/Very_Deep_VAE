@@ -90,6 +90,7 @@ def discretized_mix_logistic_loss(x, l, low_bit=False):
     means = l[:, :, :, :, :nr_mix]
     log_scales = l[:, :, :, :, nr_mix:2 * nr_mix]
     log_scales = constant_max(log_scales, -7.)
+    #print(log_scales)
     coeffs = l[:, :, :, :, 2 * nr_mix:3 * nr_mix]
     coeffs = torch.tanh(coeffs) 
 
@@ -175,6 +176,9 @@ def sample_from_discretized_mix_logistic(l, nr_mix):
 
     coeffs_raw = l[:, :, :, :, nr_mix * 2:nr_mix * 3]
     coeffs = (torch.tanh(coeffs_raw) * sel).sum(dim=4)
+
+    # print(coeffs)
+    # print(type(coeffs))
     u = torch.empty(means.shape, device=means.device).uniform_(1e-5, 1. - 1e-5)
     logistic_noise = torch.log(u) - torch.log(1. - u)
     x = means + torch.exp(log_scales) * logistic_noise
@@ -188,6 +192,7 @@ def sample_from_discretized_mix_logistic(l, nr_mix):
     result = torch.cat([x0_final, x1_final, x2_final], dim=3)
     return result
 
+# This is tool to process string in the hyperparameters
 def prepare_string(s):
     layers = [] 
     for ss in s.split(','):

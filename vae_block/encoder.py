@@ -54,11 +54,11 @@ class Encoder(HModule):
     def padding_channel(self, t, width):
         dim1, dim2, dim3, dim4 = t.shape  # Extract shape of the input tensor
         empty = torch.zeros(dim1, width, dim3, dim4, device=t.device)  # Create a tensor with target width
-        empty[:, :dim2, :, :] = t  # Copy the original tensor's channels into the new tensor
+        empty[:, :dim2, :, :] = t 
         return empty
 
     def forward(self, x):
-        # Permute input tensor from (batch, height, width, channels) to (batch, channels, height, width)
+        # (batch, height, width, channels) to (batch, channels, height, width)
         x = x.permute(0, 3, 1, 2).contiguous()
         x = self.initial_conv(x)
         
@@ -75,5 +75,5 @@ class Encoder(HModule):
                 updated_x = self.padding_channel(x, self.widths[res])
             x = updated_x
             activations[res] = x
-        # Return the dictionary of activations at different resolutions
+        # return the dictionary of activations at different resolutions
         return activations

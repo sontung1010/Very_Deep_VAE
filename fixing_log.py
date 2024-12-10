@@ -23,6 +23,6 @@ def process_eval_loss(txt_file_path, output_csv_file):
 
     df = pd.DataFrame(data)
     df.to_csv(output_csv_file, index=False)
-    print(f"CSV file saved to {output_csv_file}")
+    print(f"csv saved to {output_csv_file}")
 
 process_eval_loss('training_log_cifar.txt', 'fixed_cifar_loss_log.csv')

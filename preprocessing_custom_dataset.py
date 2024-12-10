@@ -35,7 +35,7 @@ def crop_and_resize_images(input_folder, output_folder, output_size=(32, 32)):
         resized = cv2.resize(cropped, output_size, interpolation=cv2.INTER_AREA)
         output_path = os.path.join(output_folder, os.path.splitext(image_name)[0] + '.png')
         cv2.imwrite(output_path, resized)
-        print(f"Processed and saved: {output_path}")
+        print(f"saved: {output_path}")
 
 input_folder = 'imagenet_filtered/original'
 output_folder = 'imagenet_filtered/processed'
@@ -51,7 +51,7 @@ def calculate_shift_and_scale_with_cv2(folder_path):
             image_path = os.path.join(folder_path, file_name)
             image = cv2.imread(image_path) 
             if image is None:
-                print(f"Failed to load {file_name}, skipping...")
+                print(f"Failed {file_name}, skipping")
                 continue
             image = image.astype(np.float32)
 

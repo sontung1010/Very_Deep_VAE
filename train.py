@@ -25,7 +25,7 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
     images_visualization_original, images_visualization_processed = get_displaying_data(validation_dataset, preprocess_fn, visualization_number, logger)
     stats = []
     iters_since_starting = 0
-    optimizer, scheduler, eval_loss_cur, iterate, starting_epoch = load_optimizer(H, vae, logger)
+    optimizer, scheduler, _, iterate, starting_epoch = load_optimizer(H, vae, logger)
     
     H.ema_rate = torch.as_tensor(H.ema_rate).cuda()
 
@@ -34,7 +34,7 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
         logger.info("Starting epoch" + str(epoch))
         epoch_start = time.time()
 
-        ## Creating a sample image display set
+        ## Creating a sample imge display set
         # =======================================================================
         if epoch % H.epochs_per_eval == 0:
             file_name =  f'{H.save_dir}/displaying_images_' + str(epoch) + '.png'
@@ -65,7 +65,7 @@ def train_main(H, training_dataset, validation_dataset, preprocess_fn, vae, ema_
             grad_norm = torch.nn.utils.clip_grad_norm_(vae.parameters(), H.grad_clip).item() # limiting gradient value to H.grad_clip
 
             # check for norm value in distortion and rate
-            ## This part is for gradient skipping
+            ## This part is for gradieent skipping
             return_dict = check_nans(forward_result)
             forward_result.update(return_dict)
             skipped_updates = 1
@@ -156,7 +156,9 @@ def validation_main(H, ema_vae, data_valid, preprocess_fn, logger):
     )
     return stats
 
-
+# This code is for test set
+## Use the evaluation loop for the test
+# ===================================================
 def test_main(H, ema_vae, data_test, preprocess_fn, logger):
     print('\n\n')
     logger.info("Starting testing phase.")
